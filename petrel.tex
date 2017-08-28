@@ -110,7 +110,7 @@ that allows researchers to store large datasets and easily share those data with
 Petrel leverages ALCF
 storage and infrastructure and Globus transfer and sharing services to provide a mechanism for researchers to transfer data into the system, manage data on the filesystem, and share and transfer data to other locations. Authentication and identity to access the system is provided through Globus and users can access Petrel using their campus or institution federated login.
 We report here on the design, implementation, applications, and use of this service.
-The paper is to be submitted to \url{http://www.pdsw.org/index.shtml}. Five pages plus references. Due September 1. 
+\textbf{The paper is to be submitted to \url{http://www.pdsw.org/index.shtml}. Five pages plus references. Due September 1.}
 \end{abstract}
 
 %
@@ -176,6 +176,39 @@ The scientists request a project allocation on Petrel. Upon approval, they have 
 Once data is generated at APS, scientists transfer it to the project space on Petrel. They can then set up permissions to enable remote collaborators to access all or a subset of the data. Importantly, remote collaborators do not need Argonne accounts to access the data.
 
 Petrel users can easily stage all or some of their data to a compute resource for analysis‰??and then move results back to Petrel.
+
+
+\section{System Description}
+
+Petrel comprises a single IBM Elastic Storage Server (ESS) GL6 plus eight data transfer nodes (DTNs) for external access.
+
+An ESS GL6 is configured with two IBM S822L Power8 based servers as IBM GPFS NSD servers, and one IBM S812L as a management and provisioning server. 
+Each NSD server is connected with 4$\times$FDR10 connections to the same fabric as the DTNs. 
+Petrel includes six disk trays with a total of 348 6TB SAS HDDs. 
+Configured with 8+2 parity and 3 drives worth of hot spare space, Petrel provided a usable capacity of 1.7P, and was benchmarked via IOR at Max Write: 16,563.06 MiB/sec (17,367.62 MB/sec), Max Read:  23,110.68 MiB/sec (24,233.31 MB/sec).
+
+Each of the eight Petrel DTNs has a single Mellanox ConnectX-4 40GbE NIC, a single Mellanox Connect-IB HBA (running at QDR), 64GB RAM ($\sim$42GB dedicated to GPFS), and a single socket Intel E5-1660 v3 8c @ 3.00GHz CPU. 
+Both Mellanox cards sit on PCIe 3.0 x16 buses.
+
+The eight Petrel DTNs are connected to two core Mellanox SX1710 36-port 40GbE switches
+maintained within Argonne's Joint Laboratory for Systems Evaluation (JLSE).
+%JLSE has two core Mellanox SX1710 36-port 40GbE switches. 
+The Petrel DTNs are split across the two switches, each connected with 1$\times$40GbE. 
+%The split is along even and odd numbered DTNs. 
+Each of the two 40GbE core switches has a 2$\times$40GbE link aggregation group to the ALCF core router, which in turn has a 100GbE connection to the core router for the data center within
+which ALCF is located,
+%SDN240. 
+%At this point we are sharing available bandwidth with ALCF. 
+%SDN240 in turns 
+which in turn connects at 100GbE to one of the ANL border routers.
+Thus as Petrel traffic reaches beyond JSLE to ALCF, the data center, and the border,
+it shares bandwidth with an increasing range of other activities.
+%At this point we share available bandwidth with all of the 240 datacenter, 
+%and at the border we share with the rest of the lab to ESNet.
+
+
+
+Another fun fact of this system, since we put it into production we've only had a single hard drive fail, and that was just a few weeks ago. Since it was installed we've only had one additional drive fail, which was during early burn-in.
 
 
 \section{Use Cases}
