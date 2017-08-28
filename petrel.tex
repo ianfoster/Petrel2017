@@ -31,76 +31,15 @@
 \begin{document}
 \title{Petrel: A High-Performance Research Data Server}
 
-\author{A. Aardvark}
-\orcid{1234-5678-9012}
+\author{Benjamin Allen, William Allcock, Rachana Ananthakrishnan,\\Ben Blaiszik, Kyle Chard, Ian Foster, Michael Papka}
 \affiliation{%
-  \institution{Institute for Clarity in Documentation}
-  \streetaddress{P.O. Box 1212}
-  \city{Dublin} 
-  \state{Ohio} 
-  \postcode{43017-6221}
+  \institution{Argonne National Laboratory}
+  \streetaddress{9700 S Cass Ave, Lemont, IL 60439, USA}
+%  \city{Lemont} 
+%  \state{IL} 
+%  \postcode{60439}
 }
-\email{trovato@corporation.com}
-
-\author{B. Banana}
-\affiliation{%
-  \institution{Institute for Clarity in Documentation}
-  \streetaddress{P.O. Box 1212}
-  \city{Dublin} 
-  \state{Ohio} 
-  \postcode{43017-6221}
-}
-\email{webmaster@marysville-ohio.com}
-
-\author{C. Carrot}
-\affiliation{%
-  \institution{The Th{\o}rv{\"a}ld Group}
-  \streetaddress{1 Th{\o}rv{\"a}ld Circle}
-  \city{Hekla} 
-  \country{Iceland}}
-\email{larst@affiliation.org}
-
-%\author{Valerie B\'eranger}
-%\affiliation{%
-%  \institution{Inria Paris-Rocquencourt}
-%  \city{Rocquencourt}
-%  \country{France}
-%}
-%\author{Aparna Patel} 
-%\affiliation{%
-% \institution{Rajiv Gandhi University}
-% \streetaddress{Rono-Hills}
-% \city{Doimukh} 
-% \state{Arunachal Pradesh}
-% \country{India}}
-%\author{Huifen Chan}
-%\affiliation{%
-%  \institution{Tsinghua University}
-%  \streetaddress{30 Shuangqing Rd}
-%  \city{Haidian Qu} 
-%  \state{Beijing Shi}
-%  \country{China}
-%}
-%
-%\author{Charles Palmer}
-%\affiliation{%
-%  \institution{Palmer Research Laboratories}
-%  \streetaddress{8600 Datapoint Drive}
-%  \city{San Antonio}
-%  \state{Texas} 
-%  \postcode{78229}}
-%\email{cpalmer@prl.com}
-%
-%\author{John Smith}
-%\affiliation{\institution{The Th{\o}rv{\"a}ld Group}}
-%\email{jsmith@affiliation.org}
-%
-%\author{Julius P.~Kumquat}
-%\affiliation{\institution{The Kumquat Consortium}}
-%\email{jpkumquat@consortium.net}
-
-% The default list of authors is too long for headers}
-\renewcommand{\shortauthors}{A. Aardvark et al.}
+\renewcommand{\shortauthors}{B. Allen et al.}
 
 
 \begin{abstract}
@@ -156,7 +95,11 @@ We report here on the design, implementation, applications, and use of this serv
 
 \section{Introduction}
 
-Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities\cite{UrPa16}. This is in addition to providing a large supercomputers for running traditional simulations, facilities need to evolve to become a highly usable service facility, deeply integrated into science projects and serving as a hub for science communities? Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. It provides a configurable solution to the sharing of data with colleagues and the community, while at the  same time keeping the large datasets close to vast computational resources.
+MRDP~\cite{BMRDP}.
+
+MDF~\cite{MDF2016}.
+
+Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities~\cite{UrPa16}. This is in addition to providing a large supercomputers for running traditional simulations, facilities need to evolve to become a highly usable service facility, deeply integrated into science projects and serving as a hub for science communities? Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. It provides a configurable solution to the sharing of data with colleagues and the community, while at the  same time keeping the large datasets close to vast computational resources.
 
 \begin{verbatim}
 32 Nodes with 1.7 PB usable storage
@@ -167,23 +110,12 @@ Federated login
 Self-managed by PIs
 \end{verbatim}
 
-
-
-\section{User Workflow}
-
-
-Beamline scientists from Argonne's Advanced Photon Source (APS) use Petrel as a resource for their data management.
-
-The scientists request a project allocation on Petrel. Upon approval, they have access to 100TB. They also have the right to add other users, to whom they can grant rights to manage, read, and/or write the space.
-
-Once data is generated at APS, scientists transfer it to the project space on Petrel. They can then set up permissions to enable remote collaborators to access all or a subset of the data. Importantly, remote collaborators do not need Argonne accounts to access the data.
-
-Petrel users can easily stage all or some of their data to a compute resource for analysis‰??and then move results back to Petrel.
+DEBD~\cite{foster2015networking}.
 
 
 \section{System Description}
 
-Petrel comprises a single IBM Elastic Storage Server (ESS) GL6 plus eight data transfer nodes (DTNs) for external access.
+Petrel comprises a single IBM Elastic Storage Server (ESS) GL6 plus eight data transfer nodes (DTNs)~\cite{dart2014science} for external access.
 
 An ESS GL6 is configured with two IBM S822L Power8 based servers as IBM GPFS NSD servers, and one IBM S812L as a management and provisioning server. 
 Each NSD server is connected with 4$\times$FDR10 connections to the same fabric as the DTNs. 
@@ -204,14 +136,29 @@ which ALCF is located,
 %At this point we are sharing available bandwidth with ALCF. 
 %SDN240 in turns 
 which in turn connects at 100GbE to one of the ANL border routers.
-Thus as Petrel traffic reaches beyond JSLE to ALCF, the data center, and the border,
+Thus, as Petrel traffic reaches beyond JSLE to ALCF, the data center, and the border,
 it shares bandwidth with an increasing range of other activities.
 %At this point we share available bandwidth with all of the 240 datacenter, 
 %and at the border we share with the rest of the lab to ESNet.
 
 
 
-Another fun fact of this system, since we put it into production we've only had a single hard drive fail, and that was just a few weeks ago. Since it was installed we've only had one additional drive fail, which was during early burn-in.
+
+\section{User Workflow}
+
+
+Beamline scientists from Argonne's Advanced Photon Source (APS) use Petrel as a resource for their data management.
+
+The scientists request a project allocation on Petrel. 
+Upon approval, they have access to 100TB. 
+They also have the right to add other users, to whom they can grant rights to manage, read, and/or write the space.
+
+Once data is generated at APS, scientists transfer it to the project space on Petrel. 
+They can then set up permissions to enable remote collaborators to access all or a subset of the data. 
+Importantly, remote collaborators do not need Argonne accounts to access the data.
+
+Petrel users can easily stage all or some of their data to a compute resource for analysis, and then move results back to Petrel.
+
 
 
 \section{Use Cases}
@@ -230,6 +177,7 @@ Through Petrel and Globus functionality, we provide intuitive interfaces for the
 
 \section{Usage Data}
 
+Another fun fact of this system, since we put it into production we have only had a single hard drive fail, and that was just a few weeks ago. Since it was installed we have only had one additional drive fail, which was during early burn-in.
 
 
 
