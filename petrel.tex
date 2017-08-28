@@ -156,6 +156,8 @@ We report here on the design, implementation, applications, and use of this serv
 
 \section{Introduction}
 
+Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities\cite{UrPa16}. This is in addition to providing a large supercomputers for running traditional simulations, facilities need to evolve to become a highly usable service facility, deeply integrated into science projects and serving as a hub for science communities? Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. It provides a configurable solution to the sharing of data with colleagues and the community, while at the  same time keeping the large datasets close to vast computational resources.
+
 \begin{verbatim}
 32 Nodes with 1.7 PB usable storage
 GPFS and Globus
@@ -164,6 +166,7 @@ Transfer and sharing data with collaborators
 Federated login
 Self-managed by PIs
 \end{verbatim}
+
 
 
 \section{User Workflow}
@@ -233,16 +236,13 @@ Through Petrel and Globus functionality, we provide intuitive interfaces for the
 
 
 \section{Conclusions}
-TBD
-
-
+Today Petrel allows the easy sharing of data with colleagues and the community, in the future our plan is to enhance Petrel to be able to support the analysis of the data by the same sharing group - starting with defined analysis infrastructure and over time moving to more generic analysis infrastructure.
 
 \section*{Acknowledgments}
-
-TBD
+The Argonne Leadership Computing Facility is a DOE Office of Science User Facility supported under contract DE-AC02-06CH11357.
 
 
 \bibliographystyle{ACM-Reference-Format}
-\bibliography{sample-bibliography} 
+\bibliography{petrel} 
 
 \end{document}
