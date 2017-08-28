@@ -31,7 +31,7 @@
 \begin{document}
 \title{Petrel: A High-Performance Research Data Server}
 
-\author{Benjamin Allen, William Allcock, Rachana Ananthakrishnan,\\Ben Blaiszik, Kyle Chard, Ian Foster, Michael Papka}
+\author{Benjamin Allen, William Allcock, Rachana Ananthakrishnan,\\Ben Blaiszik, Kyle Chard, Ian Foster, and Michael Papka}
 \affiliation{%
   \institution{Argonne National Laboratory}
   \streetaddress{9700 S Cass Ave, Lemont, IL 60439, USA}
@@ -43,6 +43,9 @@
 
 
 \begin{abstract}
+We established the Petrel data server at Argonne National Laboratory in 2015 as an experiment in new data services  
+
+
 Petrel is a data management service operated by the Argonne Leadership Computing Facility (ALCF)
 that allows researchers to store large datasets and easily share those data with collaborators. 
 %Researchers from the Argonne Leadership Computing Facility (ALCF) and Globus are developing the system collaboratively. 
@@ -95,11 +98,17 @@ We report here on the design, implementation, applications, and use of this serv
 
 \section{Introduction}
 
+Numero
+
 MRDP~\cite{BMRDP}.
 
-MDF~\cite{MDF2016}.
+The Materials Data Facility (MDF)~\cite{MDF2016} ...
 
-Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities~\cite{UrPa16}. This is in addition to providing a large supercomputers for running traditional simulations, facilities need to evolve to become a highly usable service facility, deeply integrated into science projects and serving as a hub for science communities? Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. It provides a configurable solution to the sharing of data with colleagues and the community, while at the  same time keeping the large datasets close to vast computational resources.
+Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities~\cite{UrPa16}. 
+This is in addition to providing a large supercomputers for running traditional simulations, facilities need to evolve to become a highly usable service facility, deeply integrated into science projects and serving as a hub for science communities. 
+Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. 
+It provides a configurable solution to the sharing of data with colleagues and the community, 
+while at the  same time keeping the large datasets close to large computational resources.
 
 \begin{verbatim}
 32 Nodes with 1.7 PB usable storage
@@ -180,7 +189,13 @@ Through Petrel and Globus functionality, we provide intuitive interfaces for the
 Another fun fact of this system, since we put it into production we have only had a single hard drive fail, and that was just a few weeks ago. Since it was installed we have only had one additional drive fail, which was during early burn-in.
 
 
+\section{Related Work}
 
+Distributed file system ... e.g., AFS 
+
+The Data Capacitor~\cite{simms2007empowering}
+
+wide area file system 
 
 
 \section{Conclusions}
