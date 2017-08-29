@@ -2,6 +2,20 @@
 
 \usepackage{booktabs} % For formal tables
 
+\newif\iffinal
+
+% Un-comment this line to see proposal without comments
+%\finaltrue
+
+\iffinal
+  \newcommand\ian[1]{}
+  \newcommand\kyle[1]{}
+  \newcommand\eli[1]{}
+\else
+  \newcommand\ian[1]{{\color{blue}[Ian: #1]}}
+  \newcommand\kyle[1]{{\color{red}[Kyle: #1]}}
+  \newcommand\eli[1]{{\color{green}[Eli: #1]}}
+\fi
 
 % Copyright
 %\setcopyright{none}
@@ -12,7 +26,6 @@
 %\setcopyright{usgovmixed}
 %\setcopyright{cagov}
 %\setcopyright{cagovmixed}
-
 
 % DOI
 \acmDOI{10.475/123_4}
@@ -29,7 +42,7 @@
 
 
 \begin{document}
-\title{Petrel: A Research Data Acceleration Service}
+\title{Petrel: A Platform for Hosting Research Data Services}
 
 \author{Benjamin Allen, William Allcock, Rachana Ananthakrishnan,\\Ben Blaiszik, Kyle Chard, Ian Foster, Lukasz Lacinski, and Michael Papka}
 \affiliation{%
@@ -105,40 +118,84 @@ We report here on the design, implementation, applications, and use of this serv
 
 \section{Introduction}
 
-As science becomes increasingly data intensive, 
-we see a growing need for discipline-based data services. 
-For example, researchers may want to distribute data from a disciplinary repository, 
-make data collected at a scientific instrument accessible to remote collaborators,
- allow users to upload datasets for analysis (and retrieve results), 
- or accept data for publication in a public archive. 
- Providing such data acceleration services is a natural way for research computing centers to deliver enhanced value to their stakeholders. But implementing and operating such services can be expensive and cumbersome. 
+Data-intensive science increasingly requires discipline-based data management tools,
+%As science becomes increasingly data intensive, 
+%we see growing demand for discipline-based data services. 
+for example to distribute data from a curated repository, 
+share data from a computational simulation or scientific instrument with remote collaborators,
+enable analyses of hosted data by remote collaborators, 
+or accept data uploads for analysis or publication.
+%or accept data for publication.
+But would-be developers of such tools need a foundation on which to build:
+a foundation that is not necessarily provided by 
+conventional research computing facilities,
+which are typically designed to support individual research projects 
+rather than long-lived and community services.
+They need, in particular,  
+storage systems that provide substantial capacity and
+high-speed storage and network access,
+and that can be managed and accessed entirely programmatically
+(e.g., via REST APIs) for easy integration into domain-specific workflows.
 
-researchers often need to stage, store, share, and distribute large quantities of data.
-In response, we designed and deployed Petrel, 
-a data service designed to support scientific  
+These considerations led us to establish the Petrel data service in 2015,
+initially as an experiment to see whether and how people
+might use a programmatically accessible storage service, 
+and then---as success stories emerged---as a production
+service for the Argonne community.
+The current Petrel system provides Globus REST API  
+access to 1.7~PB high-speed storage, connected to local and wide area networks
+at 100 Gbps.
+Authorized users can use the Globus APIs (and associated Web interfaces) to  
+move files to and from storage and to authorize others to do the same. 
 
-programmatic access for automation 
+Summarize results
 
-Conventional research computing facilities are rarely well suited for such purposes,
-being designed to support computational projects rather than data distribution.
-for example, a person may need an allocation and account before
-they can access a data system.
+Talk about benefits of Globus ...
 
-Argonne National Laboratory is home to thousands of intramural scientists and also
-operates a variety of scientific user facilities,
-including both experimental apparatus such as the Advanced Photon Source,
-with its more than 60 beamlines, and supercomputers, such as those operated
-by the Argonne Leadership Computing Facility.
-These facilities are used by many thousands of scientists annually, who increasingly
-face the need 
-These facilities and other activities at the lab increasingly involve large 
-quantities of data, 
-which proved to be surprisingly difficult to manipulate due to the lack of suitable storate facilities 
+%From a slide that I had on Petrel for ALCF review where we called it a data service
+%
+%“A uniform data fabric across the lab
+%… with seamless access to large data…
+%… for use in computation, collaboration and distribution …
+%… that is project focused and self 
+%managed …
+%… and is described and discoverable”
 
+
+
+
+%modern research data portal   
+%
+%Providing such data acceleration services is a natural way for research computing centers to deliver enhanced value to their stakeholders. But implementing and operating such services can be expensive and cumbersome. 
+%
+%researchers often need to stage, store, share, and distribute large quantities of data.
+%In response, we designed and deployed Petrel, 
+%a data service designed to support scientific  
+%
+%programmatic access for automation 
+%
+%Conventional research computing facilities are rarely well suited for such purposes,
+%being designed to support computational projects rather than data distribution.
+%for example, a person may need an allocation and account before
+%they can access a data system.
+%
+%Argonne National Laboratory is home to thousands of intramural scientists and also
+%operates a variety of scientific user facilities,
+%including both experimental apparatus such as the Advanced Photon Source,
+%with its more than 60 beamlines, and supercomputers, such as those operated
+%by the Argonne Leadership Computing Facility.
+%These facilities are used by many thousands of scientists annually, who increasingly
+%face the need 
+%These facilities and other activities at the lab increasingly involve large 
+%quantities of data, 
+%which proved to be surprisingly difficult to manipulate due to the lack of suitable storate facilities 
+%
 
 
 Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities~\cite{UrPa16}. 
-This is in addition to providing a large supercomputers for running traditional simulations, facilities need to evolve to become a highly usable service facility, deeply integrated into science projects and serving as a hub for science communities. 
+This is in addition to providing a large supercomputers for running traditional simulations, 
+facilities need to evolve to become a highly usable service facility, 
+deeply integrated into science projects and serving as a hub for science communities. 
 Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. 
 It provides a configurable solution to the sharing of data with colleagues and the community, 
 while at the  same time keeping the large datasets close to large computational resources.
@@ -254,6 +311,9 @@ Through Petrel and Globus functionality, we provide intuitive interfaces for the
 
 \section{Usage Data}
 
+A total of 80,027 transfers, of which 59,018 were from Petrel, 21,304 to Petrel, and 295 within Petrel.
+A total of 649 unique endpoints engaged in communication with Petrel, 281 as sources and 522 as destinations. 
+
 %Here are the stats you asked for:
 % 
 %Transfers to/from Petrel: 80027
@@ -330,7 +390,7 @@ project:
 
 \vspace{-1ex}
 
-\caption{The 639 (of 881 total) Petrel source and destination endpoints for which geolocation
+\caption{The 639 (of 649 total) Petrel source and destination endpoints for which geolocation
 data are available.\label{fig:usage1}}
 \end{figure}
 
@@ -342,10 +402,20 @@ data are available.\label{fig:usage1}}
 \vspace{-2ex}
 
 \caption{The 56,670 transfers (of 80,322 total) with Petrel as source or destination
-for which the other endpoint can be geolocated. Each
+for which the other endpoint can be geolocated\ian{not quite right. Asked Kyle}. Each
 point represents a single transfer,
 and gives transfer size vs.\ great circle distance between Petrel and remote source or destination, 
 with transfer rate color coded.\label{fig:usage2}}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[trim=0.1in 0.1in 0.1in 0.1in,clip,width=\columnwidth]{Figures/usage.png}
+
+\vspace{-2ex}
+
+\caption{TBD\ian{to improve if we want to include it.}.\label{fig:usage3}}
 \end{figure}
 
 
