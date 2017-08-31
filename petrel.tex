@@ -117,18 +117,44 @@ We report here on the design, implementation, applications, and use of this serv
 
 \maketitle
 
+We report on our experiences deploying and operating Petrel,
+a high-speed data service designed to support science projects 
+that must acquire, organize, and distribute large quantities of data.
+By integrating a high-speed, highly connected, and programmatically
+controllable data store within the fabric of a data-rich science
+environment, we sought to   
+
+
+Petrel's primary innovation is its use of Globus REST APIs to enable
+secure, reliable programmatic access to, and management of, 
+
+Building on a base of a high-speed 1.7PB parallel file system, Petrel
+innovates in its use of Globus REST APIs to enable programmatic control
+
+Data-intensive science increasingly requires discipline-based data management tools,
+for example to distribute content from a curated repository, 
+share files from a computational simulation or scientific instrument with remote collaborators,
+enable analyses of hosted data by remote collaborators, 
+or accept uploads for analysis or publication.
+Traditional high-performance computing facilities 
+
+Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities~\cite{UrPa16}. 
+This is in addition to providing a large supercomputers for running traditional simulations, 
+facilities need to evolve to become a highly usable service facility, 
+deeply integrated into science projects and serving as a hub for science communities. 
+Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. 
+It provides a configurable solution to the sharing of data with colleagues and the community, 
+while at the  same time keeping the large datasets close to large computational resources.
+
 
 
 \section{Introduction}
 
 Data-intensive science increasingly requires discipline-based data management tools,
-%As science becomes increasingly data intensive, 
-%we see growing demand for discipline-based data services. 
 for example to distribute content from a curated repository, 
 share files from a computational simulation or scientific instrument with remote collaborators,
 enable analyses of hosted data by remote collaborators, 
 or accept uploads for analysis or publication.
-%or accept data for publication.
 But would-be developers of such tools need a foundation on which to build:
 a foundation that is not necessarily provided by 
 conventional research computing facilities,
@@ -138,7 +164,8 @@ They need, in particular,
 storage systems that provide substantial capacity and
 high-speed storage and network access,
 and that can be managed and accessed entirely programmatically
-(e.g., via REST APIs) for easy integration into domain-specific workflows.
+%(e.g., via REST APIs) 
+for easy integration into domain-specific workflows.
 
 These considerations led us to establish the Petrel data service in 2015,
 initially as an experiment to see whether and how people
@@ -146,14 +173,29 @@ might use a programmatically accessible storage service,
 and then---as success stories emerged---as a production
 service for the Argonne community.
 The current Petrel system provides Globus REST API  
-access to 1.7~PB high-speed storage, connected to local and wide area networks
+access to 1.7~PB high-speed storage, 
+connected to local and wide area networks
 at 100 Gbps.
-Authorized users can use the Globus APIs (and associated Web interfaces) to  
+Authorized users can use Globus APIs (and associated Web interfaces) to  
 move files to and from storage and to authorize others to do the same. 
 
-Summarize results
+We have found the results of this experiment to be highly encouraging.
+Dozens of groups have made use of Petrel in one way or another to transfer
+data between Petrel and more than 600 remote locations.
+Many groups have integrated its use into workflows, often in innovative
+ways that we had not considered. 
 
-Talk about benefits of Globus ...
+We report here on the design, application, and usage of the Petrel system
+and reflect on lessons learned from its development and use.
+
+Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities~\cite{UrPa16}. 
+This is in addition to providing a large supercomputers for running traditional simulations, 
+facilities need to evolve to become a highly usable service facility, 
+deeply integrated into science projects and serving as a hub for science communities. 
+Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. 
+It provides a configurable solution to the sharing of data with colleagues and the community, 
+while at the  same time keeping the large datasets close to large computational resources.
+
 
 %From a slide that I had on Petrel for ALCF review where we called it a data service
 %
@@ -163,8 +205,6 @@ Talk about benefits of Globus ...
 %… that is project focused and self 
 %managed …
 %… and is described and discoverable”
-
-
 
 
 %modern research data portal   
@@ -195,24 +235,16 @@ Talk about benefits of Globus ...
 %
 
 
-Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities~\cite{UrPa16}. 
-This is in addition to providing a large supercomputers for running traditional simulations, 
-facilities need to evolve to become a highly usable service facility, 
-deeply integrated into science projects and serving as a hub for science communities. 
-Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. 
-It provides a configurable solution to the sharing of data with colleagues and the community, 
-while at the  same time keeping the large datasets close to large computational resources.
 
 
-
-\begin{verbatim}
-32 Nodes with 1.7 PB usable storage
-GPFS and Globus
-100TB allocation per project
-Transfer and sharing data with collaborators
-Federated login
-Self-managed by PIs
-\end{verbatim}
+%\begin{verbatim}
+%32 Nodes with 1.7 PB usable storage
+%GPFS and Globus
+%100TB allocation per project
+%Transfer and sharing data with collaborators
+%Federated login
+%Self-managed by PIs
+%\end{verbatim}
 
 MRDP~\cite{BMRDP}.
 
@@ -221,11 +253,30 @@ The Materials Data Facility (MDF)~\cite{MDF2016} ...
 DEBD~\cite{foster2015networking}.
 
 
+%Transfers to/from Petrel 80027
+%Transfers from Petrel 59018
+%Transfers to Petrel 21304
+%Transfers within Petrel 295
+%Unique src EPs 281
+%Unique dst EPs 522
+%Unique EPs 649
+%Total data from Petrel 2.07274415613e+15
+%Total files from Petrel 72779854.0
+%Total data to Petrel 4.13027153675e+15
+%Total files to Petrel 255731042.0
+%Total data to/from Petrel 6.1187793935e+15
+%Total files to/from Petrel 326728415.0
+
+A total of 80,027 transfers (59,018 outbound, 21,304 inbound),
+comprising 6.12 PB (2.07PB outbound, 4.13 PB inbound) and 327M files (73M outbound, 256M inbound).
+(Numbers do not add up perfectly due to a few hundred transfers from Petrel to Petrel.)
+
+
 \section{The Petrel System}
 
 The Petrel system comprises a parallel file system running the
 IBM General Parallel File System (GPFS)~\cite{schmuck2002gpfs},
-plus a set of associated data transfer nodes (DTNs)~\cite{dart2014science} for remote access. 
+plus eight associated data transfer nodes (DTNs)~\cite{dart2014science} for remote access. 
 Globus services are used to manage access, data transfers, and data sharing.
 
 \subsection{Hardware: Parallel Store and DTNs}
@@ -400,12 +451,11 @@ data are available.\label{fig:usage1}}
 
 \begin{figure}
 \centering
-\includegraphics[trim=0.1in 0.1in 0.1in 0.1in,clip,width=\columnwidth]{Figures/size-distance-speed.png}
+\includegraphics[trim=0.19in 0.1in 0.2in 0.1in,clip,width=\columnwidth]{Figures/size-distance-speed.png}
 
 \vspace{-2ex}
 
-\caption{The 56,670 transfers (of 80,322 total) with Petrel as source or destination
-for which the other endpoint can be geolocated\ian{not quite right. Asked Kyle}. Each
+\caption{The 80,322 transfers with Petrel as source or destination. Each
 point represents a single transfer,
 and gives transfer size vs.\ great circle distance between Petrel and remote source or destination, 
 with transfer rate color coded.\label{fig:usage2}}
