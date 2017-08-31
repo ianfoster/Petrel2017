@@ -361,7 +361,18 @@ A group of scientists from Argonne's Materials Science Division (MSD) gather exp
 
 Through Petrel and Globus functionality, we provide intuitive interfaces for these researchers to share, bundle, and publish their datasets. After data is gathered, the scientists often want to share subsets of raw data, derived datasets, and analysis results with collaborators, track metadata associated with the data, and track data provenance. Eventually, these scientists may want to make their datasets publicly and persistently available via publication functionality, fully bundled with the associated metadata and associated with a persistent identifier to aide search, discovery, and data citability.
 
-
+The Materials Data Facility (MDF) \ben{add refs} is an effort to build production data services for the materials science community
+to enable simplified publication, discovery, and reuse of materials-related datasets. The MDF data publication service allows researchers to 
+publish datasets stored on distributed resources (i.e., a Globus endpoint), mint permanent unique identifiers 
+(e.g., DOI or Handle), and implement data publication workflows through a web UI or an API and the MDF data discovery service provides 
+a simple API for users to query and access full datasets published in MDF as well as a host of data indexed from a variety of external 
+efforts (117 sources indexed to date). MDF leverages the flexibility of the Petrel service in a variety of ways including: 
+1) sharing collaborative spaces with researchers across the country for use in collecting project data prior to final publication;
+2) staging all datasets to Petrel for indexing into the discovery service (currently comprises ~70 TB of data); and
+3) storing a raw copy of the extracted JSON-formatted metadata for index persistence. In the 
+future MDF is interested in attaching compute resources to Petrel in order ot facilitate more simple operation on  
+the stored datasets. These operations may include,e.g., indexing, analyzing, visualizing, submitting jobs to other
+ALCF resources, or interacting with the data via applications such as Jupyter.
 
 \section{Usage Data}
 
