@@ -279,6 +279,18 @@ IBM General Parallel File System (GPFS)~\cite{schmuck2002gpfs},
 plus eight associated data transfer nodes (DTNs)~\cite{dart2014science} for remote access. 
 Globus services are used to manage access, data transfers, and data sharing.
 
+\begin{figure}
+\centering
+\includegraphics[trim=0.1in 3in 2.7in 0,clip,width=\columnwidth]{Figures/PetrelSystemDiagramNarrow.pdf}
+
+\vspace{-1ex}
+
+\caption{Petrel architecture, as described in the text. The NSD servers are at the top,
+with the DTNs are below them. The remainder of the figure shows how Petrel is connected to
+ALCF, other data center, and remote networks. \label{fig:arch}}
+\end{figure}
+
+
 \subsection{Hardware: Parallel Store and DTNs}
 
 Petrel hardware comprises a single IBM Elastic Storage Server (ESS) GL6 plus eight DTNs for external access.
