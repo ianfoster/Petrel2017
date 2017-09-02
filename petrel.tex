@@ -10,13 +10,11 @@
 \iffinal
   \newcommand\ian[1]{}
   \newcommand\kyle[1]{}
-  \newcommand\eli[1]{}
   \newcommand\bb[1]{}
 
 \else
   \newcommand\ian[1]{{\color{blue}[Ian: #1]}}
   \newcommand\kyle[1]{{\color{red}[Kyle: #1]}}
-  \newcommand\eli[1]{{\color{green}[Eli: #1]}}
   \newcommand\bb[1]{{\color{violet}[Blaiszik: #1]}}
 \fi
 
@@ -59,20 +57,30 @@
 
 
 \begin{abstract}
-
-Data-intensive science requires new data services beyond those provided by conventional
-high-performance computing (HPC) systems.
-We established the Petrel data server at Argonne National Laboratory in 2015 to experiment with the utility and operation of such services.
-This high-capacity, high-speed data store was configured to enable both interactive Web access
-and programmatic access via REST APIs and associated 
-
-
-Petrel is a data management service operated by the Argonne Leadership Computing Facility (ALCF)
-that allows researchers to store large datasets and easily share those data with collaborators. 
-%Researchers from the Argonne Leadership Computing Facility (ALCF) and Globus are developing the system collaboratively. 
-Petrel leverages ALCF
-storage and infrastructure and Globus transfer and sharing services to provide a mechanism for researchers to transfer data into the system, manage data on the filesystem, and share and transfer data to other locations. Authentication and identity to access the system is provided through Globus and users can access Petrel using their campus or institution federated login.
-We report here on the design, implementation, applications, and use of this service.
+We report on our experiences deploying and operating Petrel,
+a data service designed to support science projects 
+that must organize and distribute large quantities of data.
+Building on a high-performance 1.7~PB parallel file system and
+embedded in Argonne National Laboratory's 100+ Gbps network fabric, Petrel 
+leverages Science DMZ concepts and Globus APIs 
+to provide application scientists with a high-speed,
+highly connected, and programmatically controllable data store.
+We describe Petrel's design, implementation, and usage and give
+representative examples to illustrate the many different ways in which
+scientists have employed the system, 
+%
+%Data-intensive science requires new data services beyond those provided by conventional
+%high-performance computing (HPC) systems.
+%We established the Petrel data server at Argonne National Laboratory in 2015 to experiment with the utility and operation of such services.
+%This high-capacity, high-speed data store was configured to enable both interactive Web access
+%and programmatic access via REST APIs and associated 
+%
+%Petrel is a data management service operated by the Argonne Leadership Computing Facility (ALCF)
+%that allows researchers to store large datasets and easily share those data with collaborators. 
+%%Researchers from the Argonne Leadership Computing Facility (ALCF) and Globus are developing the system collaboratively. 
+%Petrel leverages ALCF
+%storage and infrastructure and Globus transfer and sharing services to provide a mechanism for researchers to transfer data into the system, manage data on the filesystem, and share and transfer data to other locations. Authentication and identity to access the system is provided through Globus and users can access Petrel using their campus or institution federated login.
+%We report here on the design, implementation, applications, and use of this service.
 \textbf{The paper is to be submitted to \url{http://www.pdsw.org/index.shtml}. Five pages plus references. Due September 7, 11:59 PM, AOE.}
 \end{abstract}
 
@@ -117,35 +125,6 @@ We report here on the design, implementation, applications, and use of this serv
 
 \maketitle
 
-We report on our experiences deploying and operating Petrel,
-a high-speed data service designed to support science projects 
-that must acquire, organize, and distribute large quantities of data.
-By integrating a high-speed, highly connected, and programmatically
-controllable data store within the fabric of a data-rich science
-environment, we sought to   
-
-
-Petrel's primary innovation is its use of Globus REST APIs to enable
-secure, reliable programmatic access to, and management of, 
-
-Building on a base of a high-speed 1.7~PB parallel file system, Petrel
-innovates in its use of Globus REST APIs to enable programmatic control
-
-Data-intensive science increasingly requires discipline-based data management tools,
-for example to distribute content from a curated repository, 
-share files from a computational simulation or scientific instrument with remote collaborators,
-enable analyses of hosted data by remote collaborators, 
-or accept uploads for analysis or publication.
-Traditional high-performance computing facilities \bb{Repeated below in Introduction}
-
-Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities~\cite{UrPa16}. 
-This is in addition to providing a large supercomputers for running traditional simulations, 
-facilities need to evolve to become a highly usable service facility, 
-deeply integrated into science projects and serving as a hub for science communities. 
-Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. 
-It provides a configurable solution to the sharing of data with colleagues and the community, 
-while at the  same time keeping the large datasets close to large computational resources.
-
 
 
 \section{Introduction}
@@ -167,34 +146,40 @@ and that can be managed and accessed entirely programmatically
 %(e.g., via REST APIs) 
 for easy integration into domain-specific workflows.
 
-These considerations led us to establish the Petrel data service in 2015,
+These considerations led the Argonne Leadership Computing Facility (ALCF)
+to establish the Petrel data service in 2015,
 initially as an experiment to see whether and how people
 might use a programmatically accessible storage service, 
 and then---as success stories emerged---as a production
-service for the Argonne community.
+service for the scientific community.
 The current Petrel system provides Globus REST API  
 access to 1.7~PB high-speed storage, 
 connected to local and wide area networks
 at 100~Gbps.
-Authorized users can use Globus APIs (and associated Web interfaces) to  
-move files to and from storage and to authorize others to do the same. 
+%Users can authenticate by using their campus or institution federated login.
+Users can request allocations of up to 100~TB.
+If approved, then can then use Globus APIs (and associated Web interfaces) to  
+move files to and from this allocated storage and to authorize others to do the same. 
+Petrel thus provides a configurable solution to the sharing of data with colleagues and the community, 
+while at the  same time keeping large datasets close to large computational resources.
 
 We have found the results of this experiment to be highly encouraging.
 Dozens of groups have made use of Petrel in one way or another to transfer
 data between Petrel and more than 600 remote locations.
-Many groups have integrated its use into workflows, often in innovative
-ways that we had not considered. 
+Many groups have integrated its use into workflows, for example to
+automate distribution of data from experimental facilities and to 
+organize and share data from simulation campaigns.
+%support computer science experiments ...
+Petrel thus represents a way in which a high-performance computing facility such as ALCF can usefully evolve
+beyond its traditional role of providing access to supercomputers for simulations~\cite{UrPa16}
+to become a highly usable service facility. 
+%deeply integrated into science projects and serving as a hub for science communities. 
+Because Petrel is configured to integrate easily with user environments and workflows,
+it can serve as a hub for science communities and 
+improve the usability and utilization of the core HPC center. 
 
-We report here on the design, application, and usage of the Petrel system
+We report in subsequent sections on the design, application, and usage of the Petrel system
 and reflect on lessons learned from its development and use.
-
-Petrel represents one sort of expansion of what is traditionally thought of as the role of high-performance computing facilities~\cite{UrPa16}. 
-This is in addition to providing a large supercomputers for running traditional simulations, 
-facilities need to evolve to become a highly usable service facility, 
-deeply integrated into science projects and serving as a hub for science communities. 
-Petrel introduces a new service that integrates with user environments and workflow to improve the usability and utilization of HPC centers. 
-It provides a configurable solution to the sharing of data with colleagues and the community, 
-while at the  same time keeping the large datasets close to large computational resources.
 
 
 %From a slide that I had on Petrel for ALCF review where we called it a data service
@@ -246,9 +231,7 @@ while at the  same time keeping the large datasets close to large computational 
 %Self-managed by PIs
 %\end{verbatim}
 
-MRDP~\cite{BMRDP}.
 
-DEBD~\cite{foster2015networking}.
 
 
 %Transfers to/from Petrel 80027
@@ -265,17 +248,18 @@ DEBD~\cite{foster2015networking}.
 %Total data to/from Petrel 6.1187793935e+15
 %Total files to/from Petrel 326728415.0
 
-A total of 80,027 transfers (59,018 outbound, 21,304 inbound),
-comprising 6.12~PB (2.07~PB outbound, 4.13~PB inbound) and 327M files (73M outbound, 256M inbound).
-(Numbers do not add up perfectly due to a few hundred transfers from Petrel to Petrel.)
 
 
 \section{The Petrel System}
 
-The Petrel system comprises a parallel file system running the
-IBM General Parallel File System (GPFS)~\cite{schmuck2002gpfs},
-plus eight associated data transfer nodes (DTNs)~\cite{dart2014science} for remote access. 
-Globus services are used to manage access, data transfers, and data sharing.
+The Petrel data service is designed to support the deployment
+and operation of instances of the
+modern research data portal (MRDP) design pattern~\cite{BMRDP}.
+In that pattern, user-provided portal logic uses REST APIs to manage data movement through
+a highly connected, high-speed data store;
+thus, sophisticated behaviors can be implemented with modest amounts of programming.
+In the following, we first describe the Petrel hardware and then the use of Globus services   
+for managing access, data transfers, and data sharing.
 
 \begin{figure}
 \centering
@@ -289,11 +273,18 @@ ALCF, other data center, and remote networks. \label{fig:arch}}
 \end{figure}
 
 
-\subsection{Hardware: Parallel Store and DTNs}
+\subsection{The Petrel Data Store and DTNs}
 
-Petrel hardware comprises a single IBM Elastic Storage Server (ESS) GL6 plus eight DTNs for external access.
+The Petrel system comprises a parallel file system running the
+IBM General Parallel File System (GPFS)~\cite{schmuck2002gpfs},
+plus eight associated data transfer nodes (DTNs)~\cite{dart2014science} for remote access. 
+This hardware is configured to operate as a Science DMZ, 
+meaning that it is directly accessible from external networks without intervening firewalls.
 
-An ESS GL6 is configured with two IBM S822L Power8 based servers as IBM GPFS Network Shared Disk (NSD) servers, and one IBM S812L as a management and provisioning server. 
+%Petrel hardware comprises a single IBM Elastic Storage Server (ESS) GL6 plus eight DTNs for external access.
+
+The Petrel data store currently comprises  a single IBM Elastic Storage Server (ESS) GL6.
+This device is configured with two IBM S822L Power8 based servers as IBM GPFS Network Shared Disk (NSD) servers, and one IBM S812L as a management and provisioning server. 
 Each NSD server is connected with 4$\times$FDR10 connections to the same fabric as the DTNs. 
 Petrel includes six disk trays with a total of 348 6TB SAS HDDs. 
 Configured with 8+2 parity and 3 drives worth of hot spare space, Petrel provided a usable capacity of 1.7P, and was benchmarked via IOR at Max Write: 16,563.06 MiB/sec (17,367.62 MB/sec), Max Read:  23,110.68 MiB/sec (24,233.31 MB/sec).
@@ -317,9 +308,8 @@ it shares bandwidth with an increasing range of other activities.
 %At this point we share available bandwidth with all of the 240 datacenter, 
 %and at the border we share with the rest of the lab to ESNet.
 
-\subsection{Software: GPFS and Globus}
+\subsection{Globus Remote Access Services}
 
-Petrel uses GPFS as its file system. 
 Remote access is provided via Globus services~\cite{Globus2016}.
 Globus provides data and identity management capabilities designed for the research community. 
 These capabilities are delivered via a cloud-hosted software- and platform-as-a-service model, 
@@ -342,7 +332,6 @@ Globus Auth provides identity and access management platform capabilities. It br
 It implements standard web protocols, such as OAuth 2.0 and OpenID Connect, that allow it to be integrated easily with external applications using standard client libraries. 
 These protocols enable third-party applications to authenticate users (using their preferred identity) directly with the chosen identity provider. Globus Auth then returns access
 tokens that the third-party application can use to validate the user's identity and to perform actions on behalf of that user, within an agreed upon scope. Globus Auth implements an identity federation model via which diverse identities can be linked, and such that presentation of one identity may support authorization for the set of identities. Integration with Globus Groups supports group-based authorization using user-managed groups.
-
 
 
 \section{Example User Workflows}
@@ -371,7 +360,41 @@ APS beamline users would also like to use Petrel to track their study metadata a
 
 Things that mention Petrel: Tekin paper~\cite{bicer2016optimization}. Skluma~\cite{beckman2017skluma}.
 
+\ian{Following text is from MRDP paper.}
+
+The Advanced Photon Source (APS) at Argonne National Laboratory, like many experimental facilities
+worldwide, 
+serves thousands of researchers every year, 
+many of whom collect data and return to their home institution.
+%most of whom visit just for a few days to collect data and then return to their home institution.
+In the past, data produced during an experiment was invariably carried back on physical media.
+However, as data sizes have grown and experiments have become more collaborative,
+that approach has become less effective.
+Data transfer via network is preferred;
+the challenge is to integrate data transfer into the experimental workflow of the facility
+in a way that is automated, secure, reliable, and scalable. %to thousands of users and datasets.
+
+%Francesco De Carlo has used Globus APIs to do just that.
+The DMagic system~\citep{dmagic} implements a MRDP to do just that. %implements a variant of the program in Listing~\ref{fig:rdpcode}
+%It integrates with APS administrative and facility systems to deliver data to experimental users.
+%When an experiment is approved at the APS, the associated researchers are registered in an APS database.
+%a set of associated researchers are registered in the APS administrative database as approved participants.
+%DMagic leverages this information as follows.
+DMagic integrates with APS administrative and facility systems to deliver data to experimental users.
+Before the experiment begins,
+it creates a shared endpoint on a large storage system maintained by Argonne's computing facility.
+DMagic then retrieves %from the APS scheduling system 
+the list of approved users for the experiment
+and adds permissions for those users to the shared endpoint.
+It then monitors the experiment data directory at the APS experimental facility and copies
+new files automatically to that shared endpoint,
+from which they can be retrieved by any approved user.
+
+
 \subsection{Materials Science}
+
+DEBD~\cite{foster2015networking}.
+
 
 A group of scientists from Argonne's Materials Science Division (MSD) gather experimental data from APS beamlines with raw data volumes ranging from 60--100 TB/month with data volumes expected to double by 2016. These scientists require a flexible environment to implement end-to-end experiment-time data analysis workflows to automate their analyses and leverage distributed computing resources. This functionality allows the researchers to compare their experimental data to simulation results drawn from high-performance computing resources to rapidly provide actionable feedback and data visualization. These scientists can leverage Petrel to help meet these requirements.
 
@@ -391,12 +414,23 @@ data prior to final publication and sharing with the public;
 3) storing a raw copy of the extracted JSON-formatted metadata for index persistence. In the 
 future, MDF is interested in attaching compute resources to Petrel in order to facilitate more simple operation on  
 the stored datasets. These operations may include, e.g., indexing, analyzing, visualizing, submitting jobs to other
-ALCF resources, or interacting with the data via applications such as Jupyter.
+ALCF resources, or interacting with the data via applications such as Jupyter~\cite{kluyver2016jupyter}.
+
+\ian{Maybe reference TomoPy~\cite{gursoy2014tomopy}.}
 
 \section{Usage Data}
 
-A total of 80,027 transfers, of which 59,018 were from Petrel, 21,304 to Petrel, and 295 within Petrel.
-A total of 649 unique endpoints engaged in communication with Petrel, 281 as sources and 522 as destinations. 
+Petrel has been operated in its current configuration since \textbf{XX}.
+(A first version, constructed with repurposed hardware from the Intrepid supercomputer,
+used 32 1~Gbps DTNs and different storage hardware.)
+During that time, it has been used to perform 
+80,027 transfers (59,018 outbound, 21,304 inbound),
+comprising 6.12~PB (2.07~PB outbound, 4.13~PB inbound) and 327M files (73M outbound, 256M inbound).
+(Numbers do not add up perfectly due to a few hundred transfers from Petrel to Petrel.)
+A total of 649 unique endpoints have engaged in communication with Petrel, 281 as sources and 522 as destinations. 
+
+\ian{Add discussion}
+
 
 %Here are the stats you asked for:
 % 
@@ -422,11 +456,12 @@ A total of 649 unique endpoints engaged in communication with Petrel, 281 as sou
 %Total to Petrel: 4912 (/21304)
 %Total from Petrel: 51758 (/59018)
 
-Another fun fact of this system, since we put it into production we have only had a single hard drive fail, and that was just a few weeks ago. Since it was installed we have only had one additional drive fail, which was during early burn-in.
+Since being put into production in \textbf{XX}, only one hard drive has failed, in July 2017.
+(One other drive during early burn-in.)
 
-Here is a list of all Petrel projects (excepting test or demo projects),
-disk space usage, with an organization and department of a PI of each
-project:
+%Here is a list of all Petrel projects (excepting test or demo projects),
+%disk space usage, with an organization and department of a PI of each
+%project:
 
 %37T     2idb (Argonne National Laboratory; Advanced Photon Source/X-ray
 %Science Division)
@@ -505,21 +540,31 @@ with transfer rate color coded.\label{fig:usage2}}
 
 \section{Related Work}
 
-Another approach to providing data services for science is to deploy distributed file
-systems across collaborating sites.
-The Andrew File System~\cite{howard1988scale} has been used for this purpose,
-while Indiana University's Data Capacitor uses the Lustre parallel distributed file system~\cite{simms2007empowering}.
+A growing number of research computing centers and associated facilities operate
+Science DMZs with associated DTNs for remote access to large storage~\cite{dart2014science}.
+However, the storage itself is often accessible only by users with facility
+accounts and is optimized for access by high-performance computing 
+systems, with efficient DTN access a secondary consideration.
+Petrel, in contrast, is optimized for high-speed network access and permits access by any
+individual authorized by an authorized user.
 
-% Lustre on TeraGrid~\cite{simms2007wide}
+Another approach to providing data services for science is to deploy a distributed file
+system across collaborating systems and sites.
+The Andrew File System~\cite{howard1988scale} has been used for this purpose.
+Indiana University's Data Capacitor uses the Lustre parallel distributed file system~\cite{simms2007empowering}, a technology that was also explored on the TeraGrid~\cite{simms2007wide}.
+File system features such as caching can be useful in certain circumstances,
+but require tighter integration across participating systems, for example at the level of accounts.
 
-
-Logistical networking~\cite{beck2000logistical} 
-
-
+Petrel and the MRDP design pattern emphasize the placement of storage outside the HPC
+center and programmatic control of data placement, 
+access, and movement.
+Logistical networking~\cite{beck2000logistical} takes this idea far further,
+embedding storage throughout the network to be managed by specialized protocols~\cite{beck2002end}. 
 
 
 \section{Conclusions}
 
+\ian{TBD}
 
 Today Petrel allows the easy sharing of data with colleagues and the community.
 In the future our plan is to enhance Petrel to be able to support the analysis of the data by the same sharing group:
