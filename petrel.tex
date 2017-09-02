@@ -420,7 +420,7 @@ ALCF resources, or interacting with the data via applications such as Jupyter~\c
 
 \section{Usage Data}
 
-Petrel has been operated in its current configuration since \textbf{XX}.
+Petrel has been operated in its current configuration since \ian{XX??}.
 (A first version, constructed with repurposed hardware from the Intrepid supercomputer,
 used 32 1~Gbps DTNs and different storage hardware.)
 During that time, it has been used to perform 
@@ -428,9 +428,28 @@ During that time, it has been used to perform
 comprising 6.12~PB (2.07~PB outbound, 4.13~PB inbound) and 327M files (73M outbound, 256M inbound).
 (Numbers do not add up perfectly due to a few hundred transfers from Petrel to Petrel.)
 A total of 649 unique endpoints have engaged in communication with Petrel, 281 as sources and 522 as destinations. 
+As shown in Figure~\ref{fig:usage1}, these endpoints are located primarily in the US and Europe, but also
+encompass Asia and Australia. 
+%(Many endpoints located within Argonne National Laboratory are not visible on the map as their distance
+%from Petrel is too small.)
 
-\ian{Add discussion}
-
+Figure~\ref{fig:usage1} provides some perspectives on Petrel usage and performance.
+Each point in this graph represents a single Globus transfer, often encompassing multiple files but
+managed as a unit.
+The x-axis represents the great circle distance between Petrel and the remote source or destination
+and the y-axis, with a log scale, the number of bytes involved in the transfer.
+From left to right, we see a large number of transfers within the US, a considerable number to Europe
+(the great circle distance from Chicago to London is 6,300 km),
+and smaller but still significant numbers of transfers to yet more distant locations.
+Looking at sizes, we see many transfers of more than a terabyte and one close to a petabyte, 
+but the majority quite a bit smaller.
+Transfer rates also vary considerably and are in general lower for smaller and more distant transfers;
+the highest rates observed was 40 Gbps (5 GB/s) from the University of Chicago's Research
+Computing Center.     
+Given that Petrel is optimized for high-speed transfers,
+we can expect that, as observed in other studies~\cite{allcock2005globus,ito2005parameter,kim2015highly,liu2017explaining}, 
+the rate for any particular transfer will depend on the characteristics of the remote endpoint and
+the existence of other contending transfers.  
 
 %Here are the stats you asked for:
 % 
@@ -456,7 +475,7 @@ A total of 649 unique endpoints have engaged in communication with Petrel, 281 a
 %Total to Petrel: 4912 (/21304)
 %Total from Petrel: 51758 (/59018)
 
-Since being put into production in \textbf{XX}, only one hard drive has failed, in July 2017.
+Since being put into production in \ian{XX??}, only one hard drive has failed, in July 2017.
 (One other drive during early burn-in.)
 
 %Here is a list of all Petrel projects (excepting test or demo projects),
