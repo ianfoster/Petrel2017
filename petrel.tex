@@ -375,7 +375,7 @@ the challenge is to integrate data transfer into the experimental workflow of th
 in a way that is automated, secure, reliable, and scalable. %to thousands of users and datasets.
 
 %Francesco De Carlo has used Globus APIs to do just that.
-The DMagic system~\citep{dmagic} implements a MRDP to do just that. %implements a variant of the program in Listing~\ref{fig:rdpcode}
+The DMagic system (\url{dmagic.readthedocs.io}) implements a MRDP to do just that. %implements a variant of the program in Listing~\ref{fig:rdpcode}
 %It integrates with APS administrative and facility systems to deliver data to experimental users.
 %When an experiment is approved at the APS, the associated researchers are registered in an APS database.
 %a set of associated researchers are registered in the APS administrative database as approved participants.
@@ -558,6 +558,21 @@ with transfer rate color coded.\label{fig:usage2}}
 
 
 \section{Related Work}
+
+\ian{to include earlier Globus publication~\cite{chard2015globus}}
+
+Many systems have been developed to enable access to scientific data,
+from GenBank~\cite{benson2012genbank} and the
+Earth System Grid~\cite{doi:10.1175/2008BAMS2459.1} to Dataverse~\citep{meyer15pub}
+and the Structural Biology Grid~\cite{meyer15pub}.
+However, few follow the MRDP design pattern in which data is located within a Science DMZ
+for high-speed access.
+Nor do various  the various portals~\citep{russell2001astrophysics}, 
+science gateways~\citep{wilkins2008teragrid,lawrence2015science}, 
+hubs~\citep{klimeck2008nanohub,mclennan2010hubzero}, 
+and cloud-hosted systems~\cite{babuju16kotta} that have been developed to
+enable on-demand access to science software.
+But these systems could all be adapted to make use of Petrel-like capabilities.
 
 A growing number of research computing centers and associated facilities operate
 Science DMZs with associated DTNs for remote access to large storage~\cite{dart2014science}.
