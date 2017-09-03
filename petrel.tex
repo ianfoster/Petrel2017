@@ -349,6 +349,9 @@ Importantly, remote collaborators do not need Argonne accounts to access the dat
 
 Petrel users can easily stage all or some of their data to a compute resource for analysis, and then move results back to Petrel.
 
+\ian{To reference somewhere? Globus publication~\cite{chard2015globus}}
+
+
 \subsection{Tomography}
 
 A microtomography research team at Argonne's Advanced Photon Source (APS) collects 20--80 TB/month of raw data, and expects to scale to about 100--200 TB/month in the near future. 
@@ -411,9 +414,11 @@ MDF leverages the flexibility of the Petrel service in a variety of ways includi
 1) sharing collaborative spaces with research teams across the country for use in collaboratively collecting project 
 data prior to final publication and sharing with the public;
 2) staging all datasets to Petrel for indexing into the discovery service (currently comprises ~60 TB of data); and
-3) storing a raw copy of the extracted JSON-formatted metadata for index persistence. In the 
+3) storing a raw copy of the extracted JSON-formatted metadata for index persistence. 
+
+In the 
 future, MDF is interested in attaching compute resources to Petrel in order to facilitate more simple operation on  
-the stored datasets. These operations may include, e.g., indexing, analyzing, visualizing, submitting jobs to other
+the stored datasets. These operations may include indexing, analyzing, visualizing, submitting jobs to other
 ALCF resources, or interacting with the data via applications such as Jupyter~\cite{kluyver2016jupyter}.
 
 \ian{Maybe reference TomoPy~\cite{gursoy2014tomopy}.}
@@ -476,7 +481,7 @@ the existence of other contending transfers.
 %Total from Petrel: 51758 (/59018)
 
 Since being put into production in \ian{XX??}, only one hard drive has failed, in July 2017.
-(One other drive during early burn-in.)
+(One other drive failed during early burn-in.)
 
 %Here is a list of all Petrel projects (excepting test or demo projects),
 %disk space usage, with an organization and department of a PI of each
@@ -559,8 +564,6 @@ with transfer rate color coded.\label{fig:usage2}}
 
 \section{Related Work}
 
-\ian{to include earlier Globus publication~\cite{chard2015globus}}
-
 Many systems have been developed to enable access to scientific data,
 from GenBank~\cite{benson2012genbank} and the
 Earth System Grid~\cite{doi:10.1175/2008BAMS2459.1} to Dataverse~\citep{meyer15pub}
@@ -579,8 +582,7 @@ Science DMZs with associated DTNs for remote access to large storage~\cite{dart2
 However, the storage itself is often accessible only by users with facility
 accounts and is optimized for access by high-performance computing 
 systems, with efficient DTN access a secondary consideration.
-Petrel, in contrast, is optimized for high-speed network access and permits access by any
-individual authorized by an authorized user.
+Petrel, in contrast, is optimized for high-speed network access and enables access by anyone.
 
 Another approach to providing data services for science is to deploy a distributed file
 system across collaborating systems and sites.
@@ -589,22 +591,46 @@ Indiana University's Data Capacitor uses the Lustre parallel distributed file sy
 File system features such as caching can be useful in certain circumstances,
 but require tighter integration across participating systems, for example at the level of accounts.
 
+Public and private cloud computing systems can also be used for online analysis of large datasets~\cite{heath2014bionimbus,CloudBook}.
+Szalay advocates for specialized hardware platforms for online analysis of large simulation
+datasets~\cite{szalay2014simulations}. 
+Such approaches are largely orthogonal to the software architecture used here.
+
 Petrel and the MRDP design pattern emphasize the placement of storage outside the HPC
 center and programmatic control of data placement, 
 access, and movement.
-Logistical networking~\cite{beck2000logistical} takes this idea far further,
+Logistical networking~\cite{beck2000logistical} takes this idea much further,
 embedding storage throughout the network to be managed by specialized protocols~\cite{beck2002end}. 
 
 
 \section{Conclusions}
 
-\ian{TBD}
+We have described the realization of a high-speed data service within the Argonne 
+Leadership Computing Facility (ALCF).
+%designed for easy integration
+%into application workflows. 
+Our experience operating this service over the past two years \ian{??} suggests that this service
+is indeed usage to many people.
+As expected, researchers have used it to distribute data produced at Argonne in
+computational and experimental 
+studies and to stage data being brought to the Argonne Leadership Computing Facility (ALCF) for analysis.
+Unexpected but pleasing is the variety of ways of which researchers have integrated it into application
+workflows.
 
-Today Petrel allows the easy sharing of data with colleagues and the community.
-In the future our plan is to enhance Petrel to be able to support the analysis of the data by the same sharing group:
+Security is an important concern when deploying computer systems at ALCF.
+Access to ALCF ....
+
+Petrel's proximity to ALCF resources makes it easy for application workflows to transfer data to
+high-performance computers for analysis.
+However, some groups (e.g., the Materials Data Facility team) have noted that the lack of directly
+connected computing is a limitation. % preventing for example interactive analysis without data transfer.
+%Today Petrel allows the easy sharing of data with colleagues and the community.
+We plan to enhance Petrel to support data analysis as well as access,
+for example 
 starting with defined analysis infrastructure and over time moving to more generic analysis infrastructure.
 
 \section*{Acknowledgments}
+
 The Argonne Leadership Computing Facility is a DOE Office of Science User Facility supported under contract DE-AC02-06CH11357.
 
 
