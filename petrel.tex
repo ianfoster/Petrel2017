@@ -93,7 +93,7 @@ scientists have employed the system,
 <ccs2012>
  <concept>
   <concept_id>10010520.10010553.10010562</concept_id>
-  <concept_desc>Computer systems organization~Embedded systems</concept_desc>
+  <concept_desc>Computer systems organization~Embedded systems\ian{TO FIX}</concept_desc>
   <concept_significance>500</concept_significance>
  </concept>
  <concept>
@@ -287,7 +287,7 @@ The Petrel data store currently comprises  a single IBM Elastic Storage Server (
 This device is configured with two IBM S822L Power8 based servers as IBM GPFS Network Shared Disk (NSD) servers, and one IBM S812L as a management and provisioning server. 
 Each NSD server is connected with 4$\times$FDR10 connections to the same fabric as the DTNs. 
 Petrel includes six disk trays with a total of 348 6TB SAS HDDs. 
-Configured with 8+2 parity and 3 drives worth of hot spare space, Petrel provided a usable capacity of 1.7P, and was benchmarked via IOR at Max Write: 16,563.06 MiB/sec (17,367.62 MB/sec), Max Read:  23,110.68 MiB/sec (24,233.31 MB/sec).
+Configured with 8+2 parity and 3 drives worth of hot spare space, Petrel provided a usable capacity of 1.7P, and was benchmarked via IOR at a maximum write rate of 16,563 MiB/sec (17,368 MB/sec) and maximum read rate of  23,111 MiB/sec (24,233 MB/sec).
 
 Each of the eight Petrel DTNs has a single Mellanox ConnectX-4 40GbE NIC, a single Mellanox Connect-IB HBA (running at QDR), 64GB RAM ($\sim$42GB dedicated to GPFS), and a single socket Intel E5-1660 v3 8c @ 3.00GHz CPU. 
 Both Mellanox cards sit on PCIe 3.0 x16 buses.
@@ -361,15 +361,15 @@ Researchers in this group get an allocation at the beamline for a duration of a 
 Subsets of the raw data need to be moved to a diverse set of analysis and storage facilities for processing and long-term preservation. Users can leverage Petrel to help meet these requirements. 
 APS beamline users would also like to use Petrel to track their study metadata and provenance, and share raw and analyzed data with collaborators (some working remotely).
 
-Things that mention Petrel: Tekin paper~\cite{bicer2016optimization}. Skluma~\cite{beckman2017skluma}.
+ Skluma~\cite{beckman2017skluma}.
 
 \ian{Following text is from MRDP paper.}
 
 The Advanced Photon Source (APS) at Argonne National Laboratory, like many experimental facilities
 worldwide, 
 serves thousands of researchers every year, 
-many of whom collect data and return to their home institution.
-%most of whom visit just for a few days to collect data and then return to their home institution.
+%most of whom collect data and return to their home institution.
+most of whom visit just for a few days to collect data and then return to their home institution.
 In the past, data produced during an experiment was invariably carried back on physical media.
 However, as data sizes have grown and experiments have become more collaborative,
 that approach has become less effective.
@@ -378,20 +378,27 @@ the challenge is to integrate data transfer into the experimental workflow of th
 in a way that is automated, secure, reliable, and scalable. %to thousands of users and datasets.
 
 %Francesco De Carlo has used Globus APIs to do just that.
-The DMagic system (\url{dmagic.readthedocs.io}) implements a MRDP to do just that. %implements a variant of the program in Listing~\ref{fig:rdpcode}
+The DMagic system (\url{dmagic.readthedocs.io}) used Petrel to do just that. %implements a variant of the program in Listing~\ref{fig:rdpcode}
 %It integrates with APS administrative and facility systems to deliver data to experimental users.
 %When an experiment is approved at the APS, the associated researchers are registered in an APS database.
 %a set of associated researchers are registered in the APS administrative database as approved participants.
 %DMagic leverages this information as follows.
 DMagic integrates with APS administrative and facility systems to deliver data to experimental users.
 Before the experiment begins,
-it creates a shared endpoint on a large storage system maintained by Argonne's computing facility.
-DMagic then retrieves %from the APS scheduling system 
-the list of approved users for the experiment
-and adds permissions for those users to the shared endpoint.
-It then monitors the experiment data directory at the APS experimental facility and copies
+it uses a Globus API to create a shared endpoint on Petrel,
+%a large storage system maintained by Argonne's computing facility.
+retrieves from the APS scheduling system 
+the list of approved users for the experiment, and uses further Globus API calls to
+add permissions for those users to the shared endpoint.
+It subsequently monitors the experiment data directory at the APS experimental facility and copies
 new files automatically to that shared endpoint,
 from which they can be retrieved by any approved user.
+
+The DMagic system is now used in this way by multiple beamlines.
+
+
+Things that mention Petrel: Tekin paper~\cite{bicer2016optimization}.
+Maybe reference TomoPy~\cite{gursoy2014tomopy}.}
 
 
 \subsection{Materials Science}
@@ -421,11 +428,10 @@ future, MDF is interested in attaching compute resources to Petrel in order to f
 the stored datasets. These operations may include indexing, analyzing, visualizing, submitting jobs to other
 ALCF resources, or interacting with the data via applications such as Jupyter~\cite{kluyver2016jupyter}.
 
-\ian{Maybe reference TomoPy~\cite{gursoy2014tomopy}.}
 
 \section{Usage Data}
 
-Petrel has been operated in its current configuration since \ian{XX??}.
+Petrel has been operated in its current configuration since July 14, 2014.
 (A first version, constructed with repurposed hardware from the Intrepid supercomputer,
 used 32 1~Gbps DTNs and different storage hardware.)
 During that time, it has been used to perform 
@@ -452,7 +458,7 @@ Transfer rates also vary considerably and are in general lower for smaller and m
 the highest rates observed was 40 Gbps (5 GB/s) from the University of Chicago's Research
 Computing Center.     
 Given that Petrel is optimized for high-speed transfers,
-we can expect that, as observed in other studies~\cite{allcock2005globus,ito2005parameter,kim2015highly,liu2017explaining}, 
+we can expect that, as observed in other studies~\cite{allcock2005globus,ito2005parameter,kim2015highly,yildirim2016application,liu2017explaining}, 
 the rate for any particular transfer will depend on the characteristics of the remote endpoint and
 the existence of other contending transfers.  
 
@@ -480,7 +486,8 @@ the existence of other contending transfers.
 %Total to Petrel: 4912 (/21304)
 %Total from Petrel: 51758 (/59018)
 
-Since being put into production in \ian{XX??}, only one hard drive has failed, in July 2017.
+Petrel has proved to be highly reliable: only one hard drive has failed 
+since it was put into production, in July 2017.
 (One other drive failed during early burn-in.)
 
 %Here is a list of all Petrel projects (excepting test or demo projects),
@@ -550,6 +557,26 @@ and gives transfer size vs.\ great circle distance between Petrel and remote sou
 with transfer rate color coded.\label{fig:usage2}}
 \end{figure}
 
+\begin{figure}
+\centering
+\includegraphics[width=0.47\textwidth,trim=0.14in 0.15in 0.15in 0.2in,clip]{Figures/petrel-size-time.png}
+\vspace{-2ex}
+
+\caption{Transfer rate vs.\ data size.
+Each point represents a single transfer request, which may involve many files.
+Incoming and outgoing transfers are distinguished.\label{fig:usage2}}
+\end{figure}
+
+\begin{figure}
+\centering
+ \includegraphics[width=0.47\textwidth,trim=0.14in 0.15in 0.15in 0.2in,clip]{Figures/petrel-bytes-day.png}
+ 
+ \vspace{-2ex}
+
+\caption{Input/output transfer volumes per day. The numbers on the x axis represent days prior to March 9, 2017.}
+\label{fig:perday}
+\end{figure} 
+
 
 \begin{figure}
 \centering
@@ -559,6 +586,7 @@ with transfer rate color coded.\label{fig:usage2}}
 
 \caption{TBD\ian{to improve if we want to include it.}.\label{fig:usage3}}
 \end{figure}
+
 
 
 
@@ -588,7 +616,8 @@ Another approach to providing data services for science is to deploy a distribut
 system across collaborating systems and sites.
 The Andrew File System~\cite{howard1988scale} has been used for this purpose.
 Indiana University's Data Capacitor uses the Lustre parallel distributed file system~\cite{simms2007empowering}, a technology that was also explored on the TeraGrid~\cite{simms2007wide}.
-File system features such as caching can be useful in certain circumstances,
+MeDiCI leverages file system mechanisms to enable data caching on a metropolitan scale~\cite{Abramson2017}.
+File system features such as caching can be useful,
 but require tighter integration across participating systems, for example at the level of accounts.
 
 Public and private cloud computing systems can also be used for online analysis of large datasets~\cite{heath2014bionimbus,CloudBook}.
@@ -609,25 +638,27 @@ We have described the realization of a high-speed data service within the Argonn
 Leadership Computing Facility (ALCF).
 %designed for easy integration
 %into application workflows. 
-Our experience operating this service over the past two years \ian{??} suggests that this service
-is indeed usage to many people.
+Our experience operating this service over the past three years suggests that this service
+is indeed useful to many people.
 As expected, researchers have used it to distribute data produced at Argonne in
 computational and experimental 
 studies and to stage data being brought to the Argonne Leadership Computing Facility (ALCF) for analysis.
-Unexpected but pleasing is the variety of ways of which researchers have integrated it into application
+Unexpected but pleasing is the variety of ways of which researchers have leveraged Petrel's API access to
+integrate it into application
 workflows.
-
-Security is an important concern when deploying computer systems at ALCF.
-Access to ALCF ....
 
 Petrel's proximity to ALCF resources makes it easy for application workflows to transfer data to
 high-performance computers for analysis.
-However, some groups (e.g., the Materials Data Facility team) have noted that the lack of directly
-connected computing is a limitation. % preventing for example interactive analysis without data transfer.
-%Today Petrel allows the easy sharing of data with colleagues and the community.
-We plan to enhance Petrel to support data analysis as well as access,
-for example 
-starting with defined analysis infrastructure and over time moving to more generic analysis infrastructure.
+However, some groups would like yet more tightly coupled computing to allow more efficient
+responses to, for example, user requests for data subsets or analyses. 
+We thus plan to enhance Petrel to support data analysis as well as access.
+Care must be taken when so doing to address security concerns. 
+Access to ALCF production resources requires an approval process and issuance of a
+CRYPTOCard hardware access token.
+Petrel, in contrast, is treated more like a web server, allowing access by anyone who can authenticate
+with an approved credential.
+One promising approach is to allow general access only for predefined analysis requests,
+while requiring two-factor authentication for user-specified analyses.
 
 \section*{Acknowledgments}
 
