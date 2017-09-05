@@ -460,6 +460,8 @@ and for experiments in rule-based data collection and processing~\cite{chard2017
 
 \ian{This section is rather weak: Not clear whether it is describing what IS done or what COULD be done. I pinged Justin to ask for info. Maybe delete?}
 
+Justin notes that ``We used it to hop between the APS and the MSD server. You can reference~\cite{wozniak2015big}.''
+
 Scientists from Argonne's Materials Science Division gather experimental data from APS beamlines with raw data volumes ranging from 60--100 TB/month~\cite{foster2015networking}. 
 %They require a flexible environment to implement end-to-end experiment-time data analysis workflows to automate their analyses and leverage distributed computing resources. This functionality allows the researchers to compare their experimental data to simulation results drawn from high-performance computing resources to rapidly provide actionable feedback and data visualization. These scientists leverage Petrel to help meet these requirements.
 We use Petrel and Globus functionality to provide intuitive interfaces for these researchers to share, bundle, and publish their datasets. After data are gathered, the scientists often want to share subsets of raw data, derived datasets, and analysis results with collaborators, track metadata associated with the data, and track data provenance. 
@@ -524,7 +526,7 @@ and smaller but still significant numbers of transfers to yet more distant locat
 Looking at sizes, we see many transfers of more than a terabyte and one close to a petabyte, 
 but the majority quite a bit smaller.
 Transfer rates also vary considerably and are in general lower for smaller and more distant transfers;
-the highest rate observed was 40 Gbps (5 GB/s) disk to disk (and 73 Gbps memory to memory)
+the highest rate observed was 40 Gbps (5 GB/s) disk-to-disk (and 73 Gbps memory-to-memory)
 from the University of Chicago's Research
 Computing Center.     
 Given that Petrel is optimized for high-speed transfers,
