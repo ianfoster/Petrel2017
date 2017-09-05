@@ -286,9 +286,12 @@ and operation of instances of this MRDP design pattern and other similar applica
 manage data movement through
 a highly connected, high-speed data store.
 A central characteristic is its support for API access, which allows
- sophisticated behaviors to be implemented with modest amounts of programming.
+sophisticated behaviors to be implemented with modest amounts of programming.
 In the following, we first describe the Petrel hardware and then the use of Globus services   
 for managing access, data transfers, and data sharing.
+
+\kyle{We could also play up the dynamic, user-managed storage model supported. Provides everything 
+dropbox does but at larger scale with high performance access. Integration with campus identities, etc.}
 
 \begin{figure}
 \centering
@@ -353,15 +356,21 @@ Globus Connect is offered in two versions:
 Globus Connect Personal for single-user deployments (e.g., a laptop or PC) and Globus Connect Server for multi-user
 deployments (e.g., a shared server or DTN). 
 Petrel runs Globus Connect Server software.
+\kyle{mention that GCS can handle multi-DTN deployments}
 
 Globus Transfer capabilities provide high performance and reliable third party data transfer. 
 The Globus service manages the entire transfer process, including coordinating authentication at source and destination; establishing a high performance data channel using  the GridFTP protocol, with configuration optimized for transfer; ensuring data integrity by comparing source/destination checksums; and recovering from any errors during the transfer.  Globus, by default, enforces the data access permissions represented
 by the underlying system; however, it also allows these access decisions to be managed through the cloud service. In the latter mode, called Globus Sharing, users may associate user- or group-based access control lists (ACLs) with particular file paths. Globus checks and enforces these ACLs when other users attempt to read or write to those paths.
 
+\kyle{potentially say more here about sharing as that is one of the core capabilities of petrel. Somewhere we should
+play up the part that people don't need local accounts. }
+
 Globus Auth provides identity and access management platform capabilities. It brokers authentication and authorization interactions between end-users, identity providers, resource servers (services), and clients (e.g., web, mobile, desktop, and command line applications, and other services). 
 It implements standard web protocols, such as OAuth 2.0 and OpenID Connect, that allow it to be integrated easily with external applications using standard client libraries. 
 These protocols enable third-party applications to authenticate users (using their preferred identity) directly with the chosen identity provider. Globus Auth then returns access
-tokens that the third-party application can use to validate the user's identity and to perform actions on behalf of that user, within an agreed upon scope. Globus Auth implements an identity federation model via which diverse identities can be linked, and such that presentation of one identity may support authorization for the set of identities. Integration with Globus Groups supports group-based authorization using user-managed groups.
+tokens that the third-party application can use to validate the user's identity and to perform actions on behalf of that user, within an agreed upon scope. Globus Auth implements an identity federation model via which diverse identities can be linked, and such that presentation of one identity may support authorization for the set of identities. 
+Integration with Globus Groups supports group-based authorization using user-managed groups.
+\kyle{Mention that groups is also important for petrel. This is how an admin determines who can access their storage}
 
 
 \section{Example User Workflows}
@@ -468,6 +477,8 @@ and for data transfer modeling and optimization studies~\cite{liu2017explaining}
 
 The DOE's Energy Exascale Earth System Model project (formerly ACME)~\cite{schmidt2017practice}
 uses Petrel to share large climate simulation data, including those published via the Earth System Grid~\cite{doi:10.1175/2008BAMS2459.1}.
+
+\kyle{It might not be so interesting, but we also use it for Globus labs.}
 
 \section{Usage Data}\label{sec:usage}
 
@@ -639,7 +650,7 @@ Earth System Grid~\cite{doi:10.1175/2008BAMS2459.1} to Dataverse~\citep{meyer15p
 and the Structural Biology Grid~\cite{meyer15pub}.
 However, few follow the MRDP design pattern~\cite{BMRDP} in which data are located within a Science DMZ
 for high-speed access.
-Nor do various  the various portals~\citep{russell2001astrophysics}, 
+Nor do various the various portals~\citep{russell2001astrophysics}, 
 science gateways~\citep{wilkins2008teragrid,lawrence2015science}, 
 hubs~\citep{klimeck2008nanohub,mclennan2010hubzero}, 
 and cloud-hosted systems~\cite{babuju16kotta} that have been developed to
