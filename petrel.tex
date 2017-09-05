@@ -400,7 +400,7 @@ worldwide,
 serves thousands of researchers every year, 
 %most of whom collect data and return to their home institution.
 most of whom visit just for a few days to collect data and then return to their home institution.
-In the past, data produced during an experiment was invariably carried back on physical media.
+In the past, data produced during an experiment were invariably carried back on physical media.
 However, as data sizes have grown and experiments have become more collaborative,
 that approach has become less effective.
 Data transfer via network is preferred;
@@ -438,8 +438,9 @@ and for experiments in rule-based data collection and processing~\cite{chard2017
 %Users can leverage Petrel to help meet these requirements. 
 
 
-\subsection{Materials Data Facility}
-\kyle{What should the heading be? MDF is the next section.}
+
+\subsection{Materials Science}
+
 \ian{This section is rather weak: Not clear whether it is describing what IS done or what COULD be done. I pinged Justin to ask for info. Maybe delete?}
 
 Scientists from Argonne's Materials Science Division gather experimental data from APS beamlines with raw data volumes ranging from 60--100 TB/month~\cite{foster2015networking}. 
@@ -454,19 +455,19 @@ with data services for simplified publication, discovery, and reuse of materials
 The MDF data publication service allows researchers to 
 publish datasets stored on distributed resources (i.e., any Globus endpoint), mint permanent unique identifiers 
 (e.g., DOI or Handle), and implement data publication workflows through a web UI or an API. The MDF data discovery service provides 
-a simple API and python tools to help users to query and access full datasets published in MDF as well as a host of data and metadata indexed 
+a simple query API along with python tools to help users to find and access full datasets published in MDF as well as to discover links to a host of relevant data indexed 
 from a variety of external efforts (117 sources indexed to date). 
 
 MDF leverages the Petrel service to: 
-1) share collaborative spaces with research teams across the country for use in collaboratively collecting project 
+1) share collaborative spaces with research teams across the country for use in collecting and organizing project 
 data prior to final publication and sharing with the public;
-2) stage datasets to Petrel for indexing into the discovery service (currently $\sim$60 TB of data); and
+2) stage datasets for indexing into the MDF discovery service (currently $\sim$60 TB of data); and
 3) store a raw copy of the extracted JSON-formatted metadata for index persistence. 
 
 In the future, the
 MDF team is interested in attaching compute resources to Petrel in order to streamline operations on  
 the stored datasets. 
-These operations may include indexing, analysis, visualization, submitting jobs to other
+These operations may include indexing material-specific file contents, extracting general metadata, performing analyzing and modeling tasks, visualizing dataset components, submitting jobs to other
 ALCF resources, or interacting with the data via applications such as Jupyter~\cite{kluyver2016jupyter}.
 
 \subsection{Other applications}
