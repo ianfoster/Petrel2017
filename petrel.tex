@@ -384,7 +384,7 @@ It implements standard web protocols, such as OAuth 2.0 and OpenID Connect, that
 These protocols enable third-party applications to authenticate users (using their preferred identity) directly with the chosen identity provider. Globus Auth then returns access
 tokens that the third-party application can use to validate the user's identity and to perform actions on behalf of that user, within an agreed upon scope. Globus Auth implements an identity federation model via which diverse identities can be linked, and such that presentation of one identity may support authorization for the set of identities. 
 
-Globus Groups provides a user-managed hierarchical group management service. 
+Globus Groups~\cite{chard16nexus} provides a user-managed hierarchical group management service. 
 It is most often used to implement group-based authorization and to allow
 users to manage collections of other users. Petrel relies on Globus
 Groups to define the set of users who are able to manage and access
@@ -506,10 +506,12 @@ Petrel has been operated in its current configuration since July 14, 2014.
 (A first version, constructed with repurposed hardware from the Intrepid supercomputer,
 used 32 1~Gbps DTNs and different storage hardware.)
 During that time, it has been used to perform 
-80,027 transfers (59,018 outbound, 21,304 inbound),
-comprising 6.12~PB (2.07~PB outbound, 4.13~PB inbound) and 327M files (73M outbound, 256M inbound).
+80,349 transfers (59,165 outbound, 21,479 inbound),
+comprising 6.19~PB (2.10~PB outbound, 4.18~PB inbound) and 328M files (73M outbound, 256M inbound).
 (Numbers do not add up perfectly due to a few hundred transfers from Petrel to Petrel.)
-A total of 649 unique endpoints have engaged in communication with Petrel, 281 as sources and 522 as destinations. 
+Usage is distributed across the Globus web interface (12,203 transfers), Globus Command
+Line Interface (22,487 transfers), and REST APIs (45,659 transfers).
+A total of 663 unique endpoints have engaged in communication with Petrel, 285 as sources and 534 as destinations. 
 As shown in Figure~\ref{fig:usage1}, these endpoints are located primarily in the US and Europe, but also
 encompass Asia and Australia. 
 %(Many endpoints located within Argonne National Laboratory are not visible on the map as their distance
@@ -608,11 +610,11 @@ since it was put into production, in July 2017.
 
 \begin{figure}
 \centering
-\includegraphics[trim=2in 3.3in 1.4in 3in,clip,width=\columnwidth]{Figures/petrel-src-dst-map2.png}
+\includegraphics[trim=2in 3.3in 1.4in 3in,clip,width=\columnwidth]{Figures/petrel-src-dst-map-3.png}
 
 \vspace{-1ex}
 
-\caption{The 639 (of 649 total) Petrel source and destination endpoints for which geolocation
+\caption{The 640 (of 663 total) Petrel source and destination endpoints for which geolocation
 data are available.\label{fig:usage1}}
 \end{figure}
 
@@ -623,8 +625,8 @@ data are available.\label{fig:usage1}}
 
 \vspace{-2ex}
 
-\caption{The 80,322 transfers with Petrel as source or destination. Each
-point represents a single transfer,
+\caption{The 79,415 transfers with Petrel as source or destination
+for which geolocation data are available. Each point represents a single transfer,
 and gives transfer size vs.\ great circle distance between Petrel and remote source or destination, 
 with transfer rate color coded.\label{fig:usage2}}
 \end{figure}
