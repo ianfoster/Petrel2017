@@ -152,14 +152,14 @@ initially as an experiment to see whether and how people
 might use a programmatically accessible storage service, 
 and then---as success stories emerged---as a production
 service for the scientific community.
-The current Petrel system provides Globus REST API  
+The current Petrel system provides Globus %REST API  
 access to 1.7~PB high-speed storage, 
 connected to local and wide area networks
 at 100+~Gbps.
 %Users can authenticate by using their campus or institution federated login.
 Users can request allocations of up to 100~TB.
-If approved, then can then use Globus APIs (and associated Web interfaces) to  
-move files to and from this allocated storage and to authorize others to do the same. 
+If approved, they can then use Globus APIs (and associated Web interfaces) to  
+move files to and from this allocated storage, organize files within this storage, and to authorize others to do the same. 
 Petrel thus provides a configurable solution to the sharing of data with colleagues and the community, 
 while at the  same time keeping large datasets close to large computational resources.
 
@@ -258,6 +258,9 @@ designed for rapid \emph{internal} access or on data portal servers that support
 only the latter traffic was allowed to traverse the firewall.
 Thus 
 high-speed data movement in and out of HPC centers was often difficult.
+Furthermore, collaboration in such environments has in the past been equally difficult, as 
+users had to request or create accounts for each of their collaborators---a process
+that was often cumbersome and not flexible enough to support dynamic collaborations. 
  
 Recently, we have seen a reinvention of academic network architectures based on the 
 concept of a Science DMZ~\cite{dart2014science}, 
@@ -285,13 +288,15 @@ Petrel is designed to support the deployment
 and operation of instances of this MRDP design pattern and other similar applications that need to
 manage data movement through
 a highly connected, high-speed data store.
+It provides a user-oriented, collaborative storage model in which
+users manage their own isolated storage allocations including not
+only data organization but also dynamic sharing of files and directories
+within the allocation without requiring local user accounts.
 A central characteristic is its support for API access, which allows
 sophisticated behaviors to be implemented with modest amounts of programming.
 In the following, we first describe the Petrel hardware and then the use of Globus services   
 for managing access, data transfers, and data sharing.
 
-\kyle{We could also play up the dynamic, user-managed storage model supported. Provides everything 
-dropbox does but at larger scale with high performance access. Integration with campus identities, etc.}
 
 \begin{figure}
 \centering
@@ -355,23 +360,35 @@ A storage system is made accessible to Globus, and thus capable of high performa
 Globus Connect is offered in two versions: 
 Globus Connect Personal for single-user deployments (e.g., a laptop or PC) and Globus Connect Server for multi-user
 deployments (e.g., a shared server or DTN). 
-Petrel runs Globus Connect Server software.
-\kyle{mention that GCS can handle multi-DTN deployments}
+Globus Connect can be deployed across multiple physical servers to facilitate
+parallel (``striped'') data transfers. 
+Petrel runs Globus Connect Server software on its eight DTNs.
 
 Globus Transfer capabilities provide high performance and reliable third party data transfer. 
 The Globus service manages the entire transfer process, including coordinating authentication at source and destination; establishing a high performance data channel using  the GridFTP protocol, with configuration optimized for transfer; ensuring data integrity by comparing source/destination checksums; and recovering from any errors during the transfer.  Globus, by default, enforces the data access permissions represented
 by the underlying system; however, it also allows these access decisions to be managed through the cloud service. In the latter mode, called Globus Sharing, users may associate user- or group-based access control lists (ACLs) with particular file paths. Globus checks and enforces these ACLs when other users attempt to read or write to those paths.
 
-\kyle{potentially say more here about sharing as that is one of the core capabilities of petrel. Somewhere we should
-play up the part that people don't need local accounts. }
+Globus Sharing is at the heart of Petrel. Each petrel allocation is assigned
+a unique shared endpoint. The owner of the allocation is given admin privileges
+on that shared endpoint which enable them to not only to manage data on
+that endpoint but to also select which other users may access or manage the endpoint. 
+Globus Sharing operates entirely with Globus Auth identities, that is it does
+not require that administrators or users of a shared endpoint have local accounts. 
+Further, it implements advanced security models to, for example, pair
+a shared endpoint with its root directory, restrict what paths can 
+be shared, and to hide any details of paths beyond what is shared in the
+file system hierarchy.
 
-Globus Auth provides identity and access management platform capabilities. It brokers authentication and authorization interactions between end-users, identity providers, resource servers (services), and clients (e.g., web, mobile, desktop, and command line applications, and other services). 
+Globus Auth~\cite{tuecke16auth} provides identity and access management platform capabilities. It brokers authentication and authorization interactions between end-users, identity providers, resource servers (services), and clients (e.g., web, mobile, desktop, and command line applications, and other services). 
 It implements standard web protocols, such as OAuth 2.0 and OpenID Connect, that allow it to be integrated easily with external applications using standard client libraries. 
 These protocols enable third-party applications to authenticate users (using their preferred identity) directly with the chosen identity provider. Globus Auth then returns access
 tokens that the third-party application can use to validate the user's identity and to perform actions on behalf of that user, within an agreed upon scope. Globus Auth implements an identity federation model via which diverse identities can be linked, and such that presentation of one identity may support authorization for the set of identities. 
-Integration with Globus Groups supports group-based authorization using user-managed groups.
-\kyle{Mention that groups is also important for petrel. This is how an admin determines who can access their storage}
 
+Globus Groups provides a user-managed hierarchical group management service. 
+It is most often used to implement group-based authorization and to allow
+users to manage collections of other users. Petrel relies on Globus
+Groups to define the set of users who are able to manage and access
+a particular allocation.
 
 \section{Example User Workflows}
 
