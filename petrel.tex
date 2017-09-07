@@ -45,7 +45,7 @@
 \begin{document}
 \title{Petrel: A Programmatically Accessible Research Data Service}
 
-\author{William Allcock, Benjamin Allen, Rachana Ananthakrishnan,\\Ben Blaiszik, Kyle Chard, Ian Foster, Lukasz Lacinski, and Michael E. Papka}
+\author{William Allcock, Benjamin E. Allen, Rachana Ananthakrishnan,\\Ben Blaiszik, Kyle Chard, Ian Foster, Lukasz Lacinski, and Michael E. Papka}
 \affiliation{%
   \institution{Argonne National Laboratory}
   \streetaddress{9700 S Cass Ave, Lemont, IL 60439, USA}
@@ -53,7 +53,7 @@
 %  \state{IL} 
 %  \postcode{60439}
 }
-\renewcommand{\shortauthors}{B. Allen et al.}
+\renewcommand{\shortauthors}{W. Allcock et al.}
 
 
 \begin{abstract}
@@ -131,8 +131,8 @@ scientists have employed the system.
 
 Data-intensive science increasingly requires discipline-based data management tools,
 for example to distribute content from a curated repository, 
-share files from a computational simulation or scientific instrument with remote collaborators,
-enable analyses of hosted data by remote collaborators, 
+share files from a computational simulation or scientific instrument with collaborators,
+enable analyses of hosted data by collaborators, 
 or accept uploads for analysis or publication.
 But would-be developers of such tools need a foundation on which to build:
 a foundation that is not necessarily provided by 
@@ -157,7 +157,7 @@ access to 1.7~PB high-speed storage,
 connected to local and wide area networks
 at 100+~Gbps.
 %Users can authenticate by using their campus or institution federated login.
-Users can request allocations of up to 100~TB.
+Users can request allocations of 100~TB or more.
 If approved, they can then use Globus APIs (and associated Web interfaces) to  
 move files to and from this allocated storage, organize files within this storage, and to authorize others to do the same. 
 Petrel thus provides a configurable solution to the sharing of data with colleagues and the community, 
@@ -262,7 +262,7 @@ Furthermore, collaboration in such environments has in the past been equally dif
 users had to request or create accounts for each of their collaborators---a process
 that was often cumbersome and not flexible enough to support dynamic collaborations. 
  
-Recently, we have seen a reinvention of academic network architectures based on the 
+A recent reinvention of academic network architectures introduces the 
 concept of a Science DMZ~\cite{dart2014science}, 
 in which specialized data servers are connected directly to
 high-speed networks and storage systems.  
@@ -314,20 +314,27 @@ ALCF, other data center, and remote networks. \label{fig:arch}}
 \subsection{The Petrel Data Store and DTNs}
 
 The Petrel system comprises a parallel file system running the
-IBM General Parallel File System (GPFS)~\cite{schmuck2002gpfs},
+IBM Spectrum Scale file system (formerly known as the
+General Parallel File System, GPFS~\cite{schmuck2002gpfs}),
 plus eight associated data transfer nodes (DTNs)~\cite{dart2014science} for remote access. 
 This hardware is configured to operate as a Science DMZ, 
-meaning that it is directly accessible from external networks without intervening firewalls.
+meaning that it is accessible from external networks without passing through the usual firewalls.
+Line-rate firewalls are in place,
+configured 
+with network access control lists 
+to limit access to Globus/GridFTP ports and,
+in particular, to limit control channel access to Globus service IP addresses.
 
 %Petrel hardware comprises a single IBM Elastic Storage Server (ESS) GL6 plus eight DTNs for external access.
 
 The Petrel data store currently comprises  a single IBM Elastic Storage Server (ESS) GL6.
-This device is configured with two IBM S822L Power8 based servers as IBM GPFS Network Shared Disk (NSD) servers, and one IBM S812L as a management and provisioning server. 
+This device is configured with two IBM S822L Power8 based servers as IBM Spectrum Scale Network Shared Disk (NSD) servers, and one IBM S812L as a management and provisioning server. 
 Each NSD server is connected with 4$\times$FDR10 connections to the same fabric as the DTNs. 
 Petrel includes six disk trays with a total of 348 6TB SAS HDDs. 
-Configured with 8+2 parity and 3 drives worth of hot spare space, Petrel provided a usable capacity of 1.7P, and was benchmarked via IOR at a maximum write rate of 16,563 MiB/sec (17,368 MB/sec) and maximum read rate of  23,111 MiB/sec (24,233 MB/sec).
+Configured with 8+2 parity and 3 drives worth of hot spare space, 
+Petrel provides a usable capacity of 1.7P, and has been benchmarked via IOR at a maximum write rate of 16,563 MiB/sec (17,368 MB/sec) and maximum read rate of  23,111 MiB/sec (24,233 MB/sec).
 
-Each of the eight Petrel DTNs has a single Mellanox ConnectX-4 40GbE NIC, a single Mellanox Connect-IB HBA (running at QDR), 64GB RAM ($\sim$42GB dedicated to GPFS), and a single socket Intel E5-1660 v3 8c @ 3.00GHz CPU. 
+Each of the eight Petrel DTNs has a single Mellanox ConnectX-4 40GbE NIC, a single Mellanox Connect-IB HBA (running at QDR), 64GB RAM ($\sim$42GB dedicated to Spectrum Scale), and a single socket Intel E5-1660 v3 8c @ 3.00GHz CPU. 
 Both Mellanox cards sit on PCIe 3.0 x16 buses.
 
 The eight Petrel DTNs are connected to two core Mellanox SX1710 36-port 40GbE switches
@@ -474,9 +481,9 @@ fully bundled with the associated metadata and associated with a persistent iden
 
 The Materials Data Facility (MDF)~\cite{MDF2016} provides the materials science community
 with data services for simplified publication, discovery, and reuse of materials-related datasets. 
-The MDF data publication service allows researchers to 
+Its data publication service allows researchers to 
 publish datasets stored on distributed resources (i.e., any Globus endpoint), mint permanent unique identifiers 
-(e.g., DOI or Handle), and implement data publication workflows through a web UI or an API~\cite{chard2015globus}. The MDF data discovery service provides 
+(e.g., DOI or Handle), and operate data publication workflows through a web interface or API~\cite{chard2015globus}. The MDF data discovery service provides 
 a simple query API along with Python tools to help users find and access full datasets published in MDF as well as  discover links to a host of relevant data indexed 
 from a variety of external efforts (117 sources indexed to date). 
 
@@ -507,16 +514,16 @@ uses Petrel to share large climate simulation data, including those published vi
 
 \section{Usage Data}\label{sec:usage}
 
-Petrel has been operated in its current configuration since July 14, 2014.
-(A first version, constructed with repurposed hardware from the Intrepid supercomputer,
-used 32 1~Gbps DTNs and different storage hardware.)
+Petrel has operated in its current configuration since July 14, 2014.
+(A first version, constructed with repurposed hardware from the Intrepid supercomputer, 
+used 32 1~Gbps-connected DTNs and DDN S2A9900 storage systems.)
 During that time, it has been used to perform 
 80,349 transfers (59,165 outbound, 21,479 inbound),
 comprising 6.19~PB (2.10~PB outbound, 4.18~PB inbound) and 328M files (73M outbound, 256M inbound).
 (Numbers do not add up perfectly due to a few hundred transfers from Petrel to Petrel.)
 Usage is distributed across the Globus web interface (12,203 transfers), Globus Command
 Line Interface (22,487 transfers), and REST APIs (45,659 transfers).
-A total of 663 unique endpoints have engaged in communication with Petrel, 285 as sources and 534 as destinations. 
+A total of 663 unique endpoints have communicated with Petrel, 285 as sources and 534 as destinations. 
 Figure~\ref{fig:usage1} shows that these endpoints are located primarily in the US and Europe, but also
 encompass Asia and Australia. 
 %(Many endpoints located within Argonne National Laboratory are not visible on the map as their distance
@@ -527,9 +534,9 @@ Each point in this graph represents a single transfer, often encompassing multip
 managed as a unit.
 The x-axis represents the great circle distance between Petrel and the remote source or destination
 and the y-axis, with a log scale, the number of bytes involved in the transfer.
-From left to right, we see a large number of transfers within the US, a considerable number to Europe
+From left to right, we see many transfers within the US, a considerable number to Europe
 (the great circle distance from Chicago to London is 6,300 km),
-and smaller but still significant numbers of transfers to yet more distant locations.
+and significant numbers even to yet more distant locations.
 Looking at sizes, we see many transfers of more than a terabyte and one close to a petabyte, 
 but the majority quite a bit smaller.
 Transfer rates also vary considerably.
@@ -674,12 +681,13 @@ Incoming and outgoing transfers are distinguished.\label{fig:ratesize}}
 
 \begin{figure}
 \centering
-\includegraphics[trim=0.1in 0.1in 0.1in 0.1in,clip,width=\columnwidth]{Figures/usage.png}
+%\includegraphics[trim=0.1in 0.1in 0.1in 0.1in,clip,width=\columnwidth]{Figures/usage.png}
+\includegraphics[trim=0.2in 0.1in 0.1in 0.1in,clip,width=\columnwidth]{Figures/PetrelUsage.png}
 
 \vspace{-2ex}
 
-\caption{Petrel storage consumption for major uses, in terabytes, as of August 2017.
-Labels indicate science domain or APS project (e.g., XFM, XPCS, 2IDB).\label{fig:usage3}}
+\caption{Petrel storage consumption for projects using more than one terabyte, as of August 2017.
+Note log scale. XPCS=X-ray photon correlation spectroscopy~\cite{shpyrko2014x}.\label{fig:usage3}}
 \end{figure}
 
 %\ian{Need to add reference to, and discussion of, Figures~\ref{fig:ratesize} and~\ref{fig:perday}.}
@@ -758,8 +766,11 @@ while requiring two-factor authentication for user-specified analyses.
 \section*{Acknowledgments}
 
 The Argonne Leadership Computing Facility is a DOE Office of Science User Facility supported under contract DE-AC02-06CH11357.
+%We thank the Globus team for the development of the technologies described here.
+%and participants in ``Building the Modern Research Data Portal'' workshops for their feedback.
+This work was also supported in part by NSF grant ACI-1148484 and by the DOE under contract DE-AC02-06CH11357.
 
-\newpage
+%\newpage
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{petrel} 
