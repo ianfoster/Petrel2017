@@ -45,7 +45,7 @@
 \begin{document}
 \title{Petrel: A Programmatically Accessible Research Data Service}
 
-\author{Benjamin Allen, William Allcock, Rachana Ananthakrishnan,\\Ben Blaiszik, Kyle Chard, Ian Foster, Lukasz Lacinski, and Michael E. Papka}
+\author{William Allcock, Benjamin Allen, Rachana Ananthakrishnan,\\Ben Blaiszik, Kyle Chard, Ian Foster, Lukasz Lacinski, and Michael E. Papka}
 \affiliation{%
   \institution{Argonne National Laboratory}
   \streetaddress{9700 S Cass Ave, Lemont, IL 60439, USA}
@@ -81,7 +81,7 @@ scientists have employed the system.
 %Petrel leverages ALCF
 %storage and infrastructure and Globus transfer and sharing services to provide a mechanism for researchers to transfer data into the system, manage data on the filesystem, and share and transfer data to other locations. Authentication and identity to access the system is provided through Globus and users can access Petrel using their campus or institution federated login.
 %We report here on the design, implementation, applications, and use of this service.
-\ian{The paper is to be submitted to \url{http://www.pdsw.org/index.shtml}. Five pages plus references. Due September 7, 11:59 PM, AOE. Need to fix index terms and keywords.}
+%\ian{The paper is to be submitted to \url{http://www.pdsw.org/index.shtml}. Five pages plus references. Due September 7, 11:59 PM, AOE. Need to fix index terms and keywords.}
 \end{abstract}
 
 %
@@ -89,38 +89,38 @@ scientists have employed the system.
 % http://dl.acm.org/ccs.cfm
 % Please copy and paste the code instead of the example below. 
 %
-\begin{CCSXML}
-<ccs2012>
- <concept>
-  <concept_id>10010520.10010553.10010562</concept_id>
-  <concept_desc>Computer systems organization~Embedded systems\ian{TO FIX}</concept_desc>
-  <concept_significance>500</concept_significance>
- </concept>
- <concept>
-  <concept_id>10010520.10010575.10010755</concept_id>
-  <concept_desc>Computer systems organization~Redundancy</concept_desc>
-  <concept_significance>300</concept_significance>
- </concept>
- <concept>
-  <concept_id>10010520.10010553.10010554</concept_id>
-  <concept_desc>Computer systems organization~Robotics</concept_desc>
-  <concept_significance>100</concept_significance>
- </concept>
- <concept>
-  <concept_id>10003033.10003083.10003095</concept_id>
-  <concept_desc>Networks~Network reliability</concept_desc>
-  <concept_significance>100</concept_significance>
- </concept>
-</ccs2012>  
-\end{CCSXML}
+%\begin{CCSXML}
+%<ccs2012>
+% <concept>
+%  <concept_id>10010520.10010553.10010562</concept_id>
+%  <concept_desc>Computer systems organization~Embedded systems\ian{TO FIX}</concept_desc>
+%  <concept_significance>500</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10010520.10010575.10010755</concept_id>
+%  <concept_desc>Computer systems organization~Redundancy</concept_desc>
+%  <concept_significance>300</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10010520.10010553.10010554</concept_id>
+%  <concept_desc>Computer systems organization~Robotics</concept_desc>
+%  <concept_significance>100</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10003033.10003083.10003095</concept_id>
+%  <concept_desc>Networks~Network reliability</concept_desc>
+%  <concept_significance>100</concept_significance>
+% </concept>
+%</ccs2012>  
+%\end{CCSXML}
 
-\ccsdesc[500]{Computer systems organization~Embedded systems}
-\ccsdesc[300]{Computer systems organization~Redundancy}
-\ccsdesc{Computer systems organization~Robotics}
-\ccsdesc[100]{Networks~Network reliability}
+%\ccsdesc[500]{Computer systems organization~Embedded systems}
+%\ccsdesc[300]{Computer systems organization~Redundancy}
+%\ccsdesc{Computer systems organization~Robotics}
+%\ccsdesc[100]{Networks~Network reliability}
 
 
-\keywords{TBD, TBD, TBD}
+%\keywords{High-speed data service, }
 
 
 \maketitle
@@ -361,8 +361,8 @@ A storage system is made accessible to Globus, and thus capable of high performa
 Globus Connect is offered in two versions: 
 Globus Connect Personal for single-user deployments (e.g., a laptop or PC) and Globus Connect Server for multi-user
 deployments (e.g., a shared server or DTN). 
-Globus Connect can be deployed across multiple physical servers to facilitate
-parallel (``striped'') data transfers. 
+Globus Connect can be deployed across multiple physical servers to enable
+parallel (``striped'') data transfers and enhance reliability by allowing for dynamic failover. 
 Petrel runs Globus Connect Server software on its eight DTNs.
 
 Globus Transfer capabilities provide high performance and reliable third party data transfer. 
@@ -459,14 +459,16 @@ and for experiments in rule-based data collection and processing~\cite{chard2017
 
 \subsection{Materials Science}
 
-\ian{This section is rather weak: Not clear whether it is describing what IS done or what COULD be done. I pinged Justin to ask for info. Maybe delete?}
-
-Justin notes that ``We used it to hop between the APS and the MSD server. You can reference~\cite{wozniak2015big}.''
-
-Scientists from Argonne's Materials Science Division gather experimental data from APS beamlines with raw data volumes ranging from 60--100 TB/month~\cite{foster2015networking}. 
+Scientists from Argonne's Materials Science Division gather experimental data from APS beamlines.
+Raw data volumes range from 60--100 TB/month. 
 %They require a flexible environment to implement end-to-end experiment-time data analysis workflows to automate their analyses and leverage distributed computing resources. This functionality allows the researchers to compare their experimental data to simulation results drawn from high-performance computing resources to rapidly provide actionable feedback and data visualization. These scientists leverage Petrel to help meet these requirements.
-We use Petrel and Globus functionality to provide intuitive interfaces for these researchers to share, bundle, and publish their datasets. After data are gathered, the scientists often want to share subsets of raw data, derived datasets, and analysis results with collaborators, track metadata associated with the data, and track data provenance. 
-Eventually, these scientists may want to make their datasets publicly and persistently available via publication functionality~\cite{chard2015globus}, fully bundled with the associated metadata and associated with a persistent identifier to aide search, discovery, and data citability.
+They use Petrel and Globus functionality to share, bundle, and publish datasets~\cite{foster2015networking}. 
+They also integrate Petrel into workflows that make datasets accessible for remote visualization
+from Python clients~\cite{wozniak2015big}. 
+
+After data are gathered, the scientists often want to share subsets of raw data, derived datasets, and analysis results with collaborators, track metadata associated with the data, and track data provenance. 
+Eventually, these scientists may want to make their datasets publicly and persistently available via publication functionality~\cite{chard2015globus}, 
+fully bundled with the associated metadata and associated with a persistent identifier to aide search, discovery, and data citability.
 
 \subsection{Materials Data Facility}
 
@@ -474,8 +476,8 @@ The Materials Data Facility (MDF)~\cite{MDF2016} provides the materials science 
 with data services for simplified publication, discovery, and reuse of materials-related datasets. 
 The MDF data publication service allows researchers to 
 publish datasets stored on distributed resources (i.e., any Globus endpoint), mint permanent unique identifiers 
-(e.g., DOI or Handle), and implement data publication workflows through a web UI or an API. The MDF data discovery service provides 
-a simple query API along with python tools to help users to find and access full datasets published in MDF as well as to discover links to a host of relevant data indexed 
+(e.g., DOI or Handle), and implement data publication workflows through a web UI or an API~\cite{chard2015globus}. The MDF data discovery service provides 
+a simple query API along with Python tools to help users find and access full datasets published in MDF as well as  discover links to a host of relevant data indexed 
 from a variety of external efforts (117 sources indexed to date). 
 
 MDF leverages the Petrel service to: 
@@ -495,11 +497,13 @@ ALCF resources, or interacting with the data via applications such as Jupyter~\c
 Petrel file system data and metadata have been used in studies of rule-based data management~\cite{chard2017ripple} and 
 automated type inference and metadata extraction~\cite{beckman2017skluma},
 and for data transfer modeling and optimization studies~\cite{liu2017explaining}. 
+In each case, the ability to write programs that stage data on high-speed storage 
+has proved useful.
 
 The DOE's Energy Exascale Earth System Model project (formerly ACME)~\cite{schmidt2017practice}
 uses Petrel to share large climate simulation data, including those published via the Earth System Grid~\cite{doi:10.1175/2008BAMS2459.1}.
 
-\kyle{It might not be so interesting, but we also use it for Globus labs.}
+%\kyle{It might not be so interesting, but we also use it for Globus labs.}
 
 \section{Usage Data}\label{sec:usage}
 
@@ -513,13 +517,13 @@ comprising 6.19~PB (2.10~PB outbound, 4.18~PB inbound) and 328M files (73M outbo
 Usage is distributed across the Globus web interface (12,203 transfers), Globus Command
 Line Interface (22,487 transfers), and REST APIs (45,659 transfers).
 A total of 663 unique endpoints have engaged in communication with Petrel, 285 as sources and 534 as destinations. 
-As shown in Figure~\ref{fig:usage1}, these endpoints are located primarily in the US and Europe, but also
+Figure~\ref{fig:usage1} shows that these endpoints are located primarily in the US and Europe, but also
 encompass Asia and Australia. 
 %(Many endpoints located within Argonne National Laboratory are not visible on the map as their distance
 %from Petrel is too small.)
 
-Figure~\ref{fig:usage1} provides some perspectives on Petrel usage and performance.
-Each point in this graph represents a single Globus transfer, often encompassing multiple files but
+Figure~\ref{fig:usage2} provides some perspectives on Petrel usage and performance.
+Each point in this graph represents a single transfer, often encompassing multiple files but
 managed as a unit.
 The x-axis represents the great circle distance between Petrel and the remote source or destination
 and the y-axis, with a log scale, the number of bytes involved in the transfer.
@@ -528,14 +532,16 @@ From left to right, we see a large number of transfers within the US, a consider
 and smaller but still significant numbers of transfers to yet more distant locations.
 Looking at sizes, we see many transfers of more than a terabyte and one close to a petabyte, 
 but the majority quite a bit smaller.
-Transfer rates also vary considerably and are in general lower for smaller and more distant transfers;
-the highest rate observed was 40 Gbps (5 GB/s) disk-to-disk (and 73 Gbps memory-to-memory)
+Transfer rates also vary considerably.
+They are in general lower for smaller and more distant transfers;
+the highest observed was 40 Gbps (5 GB/s) disk-to-disk %(and 73 Gbps memory-to-memory)
 from the University of Chicago's Research
 Computing Center.     
-Given that Petrel is optimized for high-speed transfers,
+Given that Petrel is itself optimized for high-speed transfers,
 we can expect that, as observed in other studies~\cite{allcock2005globus,ito2005parameter,kim2015highly,yildirim2016application,liu2017explaining}, 
-the rate for any particular transfer will depend on the characteristics of the remote endpoint and
-the existence of other contending transfers.  
+the rate for any particular transfer will depend largely 
+on the characteristics of the transfer and the remote endpoint, and on
+the volume of contending transfers.  
 
 Figure~\ref{fig:ratesize} shows data size vs transfer rate for 
 transfers that originate or end at Petrel. The graph shows
@@ -641,7 +647,7 @@ data are available.\label{fig:usage1}}
 
 \caption{The 79,415 transfers with Petrel as source or destination
 for which geolocation data are available. Each point represents a single transfer,
-and gives transfer size vs.\ great circle distance between Petrel and remote source or destination, 
+and gives size vs.\ great circle distance between Petrel and remote source or destination, 
 with transfer rate color coded.\label{fig:usage2}}
 \end{figure}
 
@@ -672,7 +678,8 @@ Incoming and outgoing transfers are distinguished.\label{fig:ratesize}}
 
 \vspace{-2ex}
 
-\caption{TBD\ian{to improve if we want to include it.}.\label{fig:usage3}}
+\caption{Petrel storage consumption for major uses, in terabytes, as of August 2017.
+Labels indicate science domain or APS project (e.g., XFM, XPCS, 2IDB).\label{fig:usage3}}
 \end{figure}
 
 %\ian{Need to add reference to, and discussion of, Figures~\ref{fig:ratesize} and~\ref{fig:perday}.}
@@ -686,7 +693,7 @@ Earth System Grid~\cite{doi:10.1175/2008BAMS2459.1} to Dataverse~\citep{meyer15p
 and the Structural Biology Grid~\cite{meyer15pub}.
 However, few follow the MRDP design pattern~\cite{BMRDP} in which data are located within a Science DMZ
 for high-speed access.
-Nor do various the various portals~\citep{russell2001astrophysics}, 
+Nor do the various portals~\citep{russell2001astrophysics}, 
 science gateways~\citep{wilkins2008teragrid,lawrence2015science}, 
 hubs~\citep{klimeck2008nanohub,mclennan2010hubzero}, 
 and cloud-hosted systems~\cite{babuju16kotta} that have been developed to
@@ -752,6 +759,7 @@ while requiring two-factor authentication for user-specified analyses.
 
 The Argonne Leadership Computing Facility is a DOE Office of Science User Facility supported under contract DE-AC02-06CH11357.
 
+\newpage
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{petrel} 
